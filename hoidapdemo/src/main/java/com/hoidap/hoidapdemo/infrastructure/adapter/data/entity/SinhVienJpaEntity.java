@@ -22,16 +22,10 @@ public class SinhVienJpaEntity {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "ma_lop")
-    private String maLop;
-
-    @Column(name = "khoa")
-    private String khoa;
-
     @Column(name = "password", nullable = false, length = 100)
     private String password;
 
-    @ManyToOne(fetch =  FetchType.LAZY)
-    @JoinColumn(name = "ma_cv", referencedColumnName = "ma_cv")
-    private CVHTJpaEntity cvht;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ma_lop", referencedColumnName = "ma_lop")
+    private LopJpaEntity lop;
 }

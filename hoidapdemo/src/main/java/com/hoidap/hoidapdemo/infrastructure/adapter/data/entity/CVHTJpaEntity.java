@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "cvht")
 @Data
@@ -22,11 +24,13 @@ public class CVHTJpaEntity {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "chuyen_nganh")
-    private String chuyenNganh;
+    @Column(name = "chuyen_mon")
+    private String chuyenMon;
 
     @Column(name = "password", nullable = false, length = 100)
     private String password;
 
+    @OneToMany(mappedBy = "cvht", fetch = FetchType.LAZY)
+    private List<LopJpaEntity> cacLopPhuTrach;
 
 }
