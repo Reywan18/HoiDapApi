@@ -1,12 +1,10 @@
 package com.hoidap.hoidapdemo.infrastructure.adapter.web.controller;
 
 import com.hoidap.hoidapdemo.application.port.UserServicePort;
-import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.UserDto;
+import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.*;
 import org.springframework.http.ResponseEntity;
-import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.AuthResponse;
-import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.LoginRequest;
-import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.RegisterRequest;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.common.AppStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +25,6 @@ public class AuthController {
         String userId = userService.register(
                 request.getEmail(),
                 request.getPassword(),
-                request.getMaDinhDanh(),
                 request.getHoTen(),
                 request.getSoDienThoai(),
                 request.getRole()
@@ -60,6 +57,29 @@ public class AuthController {
                             .message("Đăng nhập thất bại: " + e.getMessage())
                             .build()
             );
+        }
+    }
+
+    @PostMapping("/profile/update")
+    public ResponseEntity<AuthResponse> updateProfile(@Valid @RequestBody ProfileUpdateRequest request, Authentication authentication) {
+        String email = authentication.getName();
+        try {
+            userService.updateProfile(email, request.getMaLop(), request.getChuyenMon());
+
+            return ResponseEntity.ok(AuthResponse.builder()
+                    .status(AppStatus.SUCCESS.getCode())
+                    .message(AppStatus.SUCCESS.getMessage())
+                    .build());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(AuthResponse.builder()
+                    .status(AppStatus.MISSING_VALUE.getCode())
+                    .message(AppStatus.MISSING_VALUE.getMessage() + " " + e.getMessage())
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(AuthResponse.builder()
+                    .status(AppStatus.INTERNAL_ERROR.getCode())
+                    .message(AppStatus.INTERNAL_ERROR.getMessage())
+                    .build());
         }
     }
 }

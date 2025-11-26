@@ -12,8 +12,6 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterRequest {
-    @NotBlank(message = "Mã định danh không được để trống")
-    private String maDinhDanh;
 
     @NotBlank(message = "Email không được để trống")
     private String email;
