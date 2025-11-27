@@ -1,8 +1,10 @@
 package com.hoidap.hoidapdemo.infrastructure.adapter.security;
 
 import com.hoidap.hoidapdemo.domain.model.UserRole;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.AdminJpaEntity;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.CVHTJpaEntity;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.SinhVienJpaEntity;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.AdminJpaRepository;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.CVHTJpaRepository;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.SinhVienJpaRepository;
 import org.springframework.security.core.userdetails.User;
@@ -17,10 +19,12 @@ import java.util.Optional;
 public class CustomerUserDetailService implements  UserDetailsService {
     private final SinhVienJpaRepository sinhVienRepo;
     private final CVHTJpaRepository cvhtRepo;
+    private final AdminJpaRepository adminRepo;
 
-    public CustomerUserDetailService(SinhVienJpaRepository sinhVienRepo, CVHTJpaRepository cvhtRepo) {
+    public CustomerUserDetailService(SinhVienJpaRepository sinhVienRepo, CVHTJpaRepository cvhtRepo, AdminJpaRepository adminRepo) {
         this.sinhVienRepo = sinhVienRepo;
         this.cvhtRepo = cvhtRepo;
+        this.adminRepo = adminRepo;
     }
 
     @Override
@@ -43,6 +47,16 @@ public class CustomerUserDetailService implements  UserDetailsService {
                         .password(cv.getPassword())
                         .roles(UserRole.CVHT.name())
                         .build();
+        }
+
+        var adminOpt = adminRepo.findByEmail(email);
+        if (adminOpt.isPresent()) {
+            AdminJpaEntity admin = adminOpt.get();
+            return User.builder()
+                    .username(admin.getEmail())
+                    .password(admin.getPassword())
+                    .roles(UserRole.ADMIN.name())
+                    .build();
         }
 
         throw  new UsernameNotFoundException("User not found with email: " + email);

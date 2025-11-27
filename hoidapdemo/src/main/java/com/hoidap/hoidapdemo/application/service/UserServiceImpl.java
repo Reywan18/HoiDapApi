@@ -2,9 +2,11 @@ package com.hoidap.hoidapdemo.application.service;
 
 import com.hoidap.hoidapdemo.application.port.UserServicePort;
 import com.hoidap.hoidapdemo.domain.model.UserRole;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.AdminJpaEntity;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.CVHTJpaEntity;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.LopJpaEntity;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.SinhVienJpaEntity;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.AdminJpaRepository;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.CVHTJpaRepository;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.LopJpaRepository;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.SinhVienJpaRepository;
@@ -19,6 +21,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserServicePort {
     private final SinhVienJpaRepository sinhVienRepo;
@@ -27,6 +31,7 @@ public class UserServiceImpl implements UserServicePort {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final LopJpaRepository lopRepo;
+    private final AdminJpaRepository adminRepo;
 
     public UserServiceImpl(
             SinhVienJpaRepository sinhVienRepo,
@@ -34,7 +39,8 @@ public class UserServiceImpl implements UserServicePort {
             PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager,
             JwtUtils jwtUtils,
-            LopJpaRepository lopRepo)
+            LopJpaRepository lopRepo,
+            AdminJpaRepository adminRepo)
     {
         this.sinhVienRepo = sinhVienRepo;
         this.cvhtRepo = cvhtRepo;
@@ -42,6 +48,7 @@ public class UserServiceImpl implements UserServicePort {
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
         this.lopRepo = lopRepo;
+        this.adminRepo = adminRepo;
     }
 
     @Override
@@ -129,7 +136,18 @@ public class UserServiceImpl implements UserServicePort {
                     .build();
         }
 
-        throw new IllegalArgumentException("User not found with email: " + email);
+        var adminOpt = adminRepo.findByEmail(email);
+        if (adminOpt.isPresent()) {
+            AdminJpaEntity admin = adminOpt.get();
+            return UserDto.builder()
+                    .maDinhDanh(admin.getEmail())
+                    .hoTen(admin.getHoTen())
+                    .email(null)
+                    .role(UserRole.ADMIN.name())
+                    .build();
+        }
+
+        throw new IllegalArgumentException("User not found with identifier: " + email);
     }
 
     private String generateNextId(String maxId, String prefix) {
@@ -176,4 +194,67 @@ public class UserServiceImpl implements UserServicePort {
 
         throw new UsernameNotFoundException("Không tìm thấy người dùng.");
     }
+
+    //Admin SinhVien
+    @Override
+    public List<SinhVienJpaEntity> getAllSinhVien() {
+        return sinhVienRepo.findAll();
+    }
+
+    @Override
+    public SinhVienJpaEntity getSinhVienById(String id) {
+        return sinhVienRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy SV: " + id));
+    }
+
+    @Override
+    @Transactional
+    public void saveSinhVien(SinhVienJpaEntity sv) {
+        if (sinhVienRepo.existsById(sv.getMaSv())) {
+            SinhVienJpaEntity oldSV = getSinhVienById(sv.getMaSv());
+            if (sv.getPassword() == null || sv.getPassword().isEmpty()) {
+                sv.setPassword(oldSV.getPassword());
+            } else {
+                sv.setPassword(passwordEncoder.encode(sv.getPassword()));
+            }
+        } else {
+            sv.setPassword(passwordEncoder.encode(sv.getPassword()));
+        }
+        sinhVienRepo.save(sv);
+    }
+
+    @Override
+    @Transactional
+    public void deleteSinhVien(String id) {
+        sinhVienRepo.deleteById(id);
+    }
+
+    //Admin Cvht
+    @Override
+    public List<CVHTJpaEntity> getAllCVHT() { return cvhtRepo.findAll(); }
+
+    @Override
+    public CVHTJpaEntity getCVHTById(String id) {
+        return cvhtRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Not found"));
+    }
+
+    @Override
+    @Transactional
+    public void saveCVHT(CVHTJpaEntity cv) {
+        if (cvhtRepo.existsById(cv.getMaCv())) {
+            CVHTJpaEntity oldCV = getCVHTById(cv.getMaCv());
+            if (cv.getPassword() == null || cv.getPassword().isEmpty()) {
+                cv.setPassword(oldCV.getPassword());
+            } else {
+                cv.setPassword(passwordEncoder.encode(cv.getPassword()));
+            }
+        } else {
+            cv.setPassword(passwordEncoder.encode(cv.getPassword()));
+        }
+        cvhtRepo.save(cv);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCVHT(String id) { cvhtRepo.deleteById(id); }
 }

@@ -36,15 +36,24 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                //.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/img/**", "/vendor/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/auth/register", "/api/auth/login", "/api/setup/**").permitAll()
                         .requestMatchers("/api/questions/advisor/**").hasRole("CVHT")
                         .requestMatchers("/api/classes/**").hasRole("CVHT")
                         .requestMatchers("/api/questions/**").hasAnyRole("SINH_VIEN", "CVHT")
 
                         .anyRequest().authenticated()
-                );
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/admin/lop", true) // Đăng nhập xong chuyển về trang QL Lớp
+                        .permitAll()
+                )
+                .logout(logout -> logout.permitAll());
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
