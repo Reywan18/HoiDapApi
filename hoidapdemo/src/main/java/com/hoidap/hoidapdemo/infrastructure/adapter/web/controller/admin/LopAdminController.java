@@ -1,10 +1,10 @@
 package com.hoidap.hoidapdemo.infrastructure.adapter.web.controller.admin;
 
 import com.hoidap.hoidapdemo.application.port.LopServicePort;
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.LopJpaEntity;
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.CVHTJpaRepository;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.lop.LopJpaEntity;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.cvht.CVHTJpaRepository;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.common.excel.ExcelHelper;
-import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.CreateLopRequest;
+import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.lop.CreateLopRequest;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;

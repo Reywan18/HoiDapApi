@@ -1,12 +1,12 @@
 package com.hoidap.hoidapdemo.infrastructure.adapter.security;
 
 import com.hoidap.hoidapdemo.domain.model.UserRole;
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.AdminJpaEntity;
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.CVHTJpaEntity;
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.SinhVienJpaEntity;
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.AdminJpaRepository;
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.CVHTJpaRepository;
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.SinhVienJpaRepository;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.admin.AdminJpaEntity;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.cvht.CVHTJpaEntity;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.sinhvien.SinhVienJpaEntity;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.admin.AdminJpaRepository;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.cvht.CVHTJpaRepository;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.sinhvien.SinhVienJpaRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

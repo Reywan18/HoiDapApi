@@ -2,8 +2,8 @@ package com.hoidap.hoidapdemo.infrastructure.adapter.web.controller.admin;
 
 import com.hoidap.hoidapdemo.application.port.LopServicePort;
 import com.hoidap.hoidapdemo.application.port.UserServicePort;
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.CVHTJpaEntity;
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.SinhVienJpaEntity;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.cvht.CVHTJpaEntity;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.sinhvien.SinhVienJpaEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

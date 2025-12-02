@@ -1,6 +1,6 @@
 package com.hoidap.hoidapdemo.infrastructure.adapter.web.common.excel;
 
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.LopJpaEntity;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.lop.LopJpaEntity;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;

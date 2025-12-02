@@ -1,7 +1,7 @@
 package com.hoidap.hoidapdemo.application.port;
 
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.LopJpaEntity;
-import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.CreateLopRequest;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.lop.LopJpaEntity;
+import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.lop.CreateLopRequest;
 
 import java.util.List;
 

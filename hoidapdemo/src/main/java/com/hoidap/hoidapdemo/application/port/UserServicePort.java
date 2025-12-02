@@ -1,9 +1,9 @@
 package com.hoidap.hoidapdemo.application.port;
 
 import com.hoidap.hoidapdemo.domain.model.UserRole;
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.CVHTJpaEntity;
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.SinhVienJpaEntity;
-import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.UserDto;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.cvht.CVHTJpaEntity;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.sinhvien.SinhVienJpaEntity;
+import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.user.UserDto;
 
 import java.util.List;
 

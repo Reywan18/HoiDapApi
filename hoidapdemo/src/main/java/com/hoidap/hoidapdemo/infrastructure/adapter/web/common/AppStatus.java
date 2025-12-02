@@ -1,15 +1,14 @@
 package com.hoidap.hoidapdemo.infrastructure.adapter.web.common;
 
 public enum AppStatus {
-    SUCCESS(200, "Thanh cong"),
+    SUCCESS(AppCode.SUCCESS, AppMessage.SUCCESS),
 
-    USER_ALREADY_EXISTS(401, "Người dùng đã tồn tại"),
-    INVALID_ROLE(402, "Vai trò không hợp lệ"),
-    MISSING_VALUE(403, "Thiếu thông tin"),
-    INVALID_REQUEST(404, "Dữ liệu đầu vào không hợp lệ"),
+    USER_ALREADY_EXISTS(AppCode.UNAUTHORIZED, AppMessage.USER_ALREADY_EXISTS), // Ví dụ dùng 401
+    INVALID_ROLE(AppCode.INVALID_REQUEST, AppMessage.INVALID_ROLE),
+    MISSING_VALUE(AppCode.FORBIDDEN, AppMessage.MISSING_VALUE),
+    INVALID_REQUEST_DATA(AppCode.INVALID_REQUEST, AppMessage.INVALID_REQUEST),
 
-    INTERNAL_ERROR(500, "Lỗi hệ thống");
-
+    INTERNAL_ERROR(AppCode.INTERNAL_SERVER_ERROR, AppMessage.INTERNAL_ERROR);
     private final int code;
     private final String message;
 

@@ -3,12 +3,12 @@ package com.hoidap.hoidapdemo.infrastructure.config;
 import com.hoidap.hoidapdemo.infrastructure.adapter.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -39,18 +39,20 @@ public class SecurityConfig {
                 //.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/vendor/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**", "/api/classes/**").hasRole("ADMIN")
                         .requestMatchers("/api/auth/register", "/api/auth/login", "/api/setup/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/questions/*/answer").hasRole("CVHT")
                         .requestMatchers("/api/questions/advisor/**").hasRole("CVHT")
-                        .requestMatchers("/api/classes/**").hasRole("CVHT")
-                        .requestMatchers("/api/questions/**").hasAnyRole("SINH_VIEN", "CVHT")
+                        .requestMatchers(HttpMethod.POST, "/api/questions/**").hasRole("SINH_VIEN")
+                        .requestMatchers(HttpMethod.PUT, "/api/questions/**").hasRole("SINH_VIEN")
+                        .requestMatchers("/api/questions/**").hasAnyRole("SINH_VIEN", "CVHT", "ADMIN")
 
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/admin/lop", true) // Đăng nhập xong chuyển về trang QL Lớp
+                        .defaultSuccessUrl("/admin/lop", true)
                         .permitAll()
                 )
                 .logout(logout -> logout.permitAll());

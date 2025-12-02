@@ -1,7 +1,7 @@
 package com.hoidap.hoidapdemo.infrastructure.config;
 
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.common.AppStatus;
-import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.AuthResponse;
+import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.auth.AuthResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
 
         AuthResponse errorResponse = AuthResponse.builder()
                 .status(status.getCode())
-                .message(e.getMessage())
+                .message(status.getMessage())
                 .build();
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
         String errorMessage = Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage();
 
         AuthResponse errorResponse = AuthResponse.builder()
-                .status(AppStatus.INVALID_REQUEST.getCode())
+                .status(AppStatus.INVALID_REQUEST_DATA.getCode())
                 .message(errorMessage)
                 .build();
 

@@ -1,11 +1,11 @@
 package com.hoidap.hoidapdemo.application.service;
 
 import com.hoidap.hoidapdemo.application.port.LopServicePort;
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.CVHTJpaEntity;
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.LopJpaEntity;
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.CVHTJpaRepository;
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.LopJpaRepository;
-import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.CreateLopRequest;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.cvht.CVHTJpaEntity;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.lop.LopJpaEntity;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.cvht.CVHTJpaRepository;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.lop.LopJpaRepository;
+import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.lop.CreateLopRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 

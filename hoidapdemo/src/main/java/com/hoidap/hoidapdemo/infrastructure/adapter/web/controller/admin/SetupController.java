@@ -1,8 +1,8 @@
 package com.hoidap.hoidapdemo.infrastructure.adapter.web.controller.admin;
 
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.AdminJpaEntity;
-import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.AdminJpaRepository;
-import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.LoginRequest;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.admin.AdminJpaEntity;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.admin.AdminJpaRepository;
+import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.auth.LoginRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
