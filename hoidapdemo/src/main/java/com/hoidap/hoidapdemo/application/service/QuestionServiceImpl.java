@@ -12,6 +12,7 @@ import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.question.Que
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.sinhvien.SinhVienJpaRepository;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.specification.QuestionSpecification;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.answer.AnswerRequest;
+import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.answer.LatestAnswerResponse;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.common.PageResponse;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.question.QuestionFilter;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.question.QuestionRequest;
@@ -199,6 +200,37 @@ public class QuestionServiceImpl {
                 .tenCvht(q.getCvht() != null ? q.getCvht().getHoTen() : null)
                 .fileName(q.getFileName())
                 .fileDownloadUri(downloadUri)
+                .build();
+    }
+
+    public LatestAnswerResponse getLatestAnswer(Long questionId) {
+        AnswerJpaEntity answer = answerRepo.findByQuestion_MaCauHoi(questionId)
+                .orElse(null);
+        if (answer == null) {
+            return null;
+        }
+
+        AnswerVersionJpaEntity latestVersion = answerVersionRepo
+                .findFirstByAnswer_IdOrderByVersionDesc(answer.getId())
+                .orElse(null);
+
+        if (latestVersion == null) return null;
+
+        String downloadUrl = null;
+        if (latestVersion.getFileData() != null) {
+            downloadUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/api/questions/versions/")
+                    .path(latestVersion.getId().toString())
+                    .path("/file")
+                    .toUriString();
+        }
+
+        return LatestAnswerResponse.builder()
+                .noiDung(latestVersion.getNoiDung())
+                .tenCvht(answer.getCvht().getHoTen())
+                .ngayTraLoi(latestVersion.getThoiGianTao())
+                .fileName(latestVersion.getFileName())
+                .fileDownloadUrl(downloadUrl)
                 .build();
     }
 }

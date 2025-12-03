@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/vendor/**").permitAll()
                         .requestMatchers("/admin/**", "/api/classes/**").hasRole("ADMIN")
+                        .requestMatchers("/api/reports/**").hasRole("ADMIN")
                         .requestMatchers("/api/auth/register", "/api/auth/login", "/api/setup/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/questions/*/answer").hasRole("CVHT")
                         .requestMatchers("/api/questions/advisor/**").hasRole("CVHT")
@@ -52,7 +53,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/admin/lop", true)
+                        .defaultSuccessUrl("/admin/dashboard", true)
                         .permitAll()
                 )
                 .logout(logout -> logout.permitAll());

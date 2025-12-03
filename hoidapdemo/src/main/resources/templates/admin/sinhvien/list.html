@@ -14,29 +14,8 @@
 
 <body id="page-top">
 <div id="wrapper">
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin/lop">
-            <div class="sidebar-brand-text mx-3">Admin Panel</div>
-        </a>
-        <hr class="sidebar-divider my-0">
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/admin/lop}">
-                <i class="fas fa-fw fa-chalkboard"></i>
-                <span>Quản Lý Lớp</span></a>
-        </li>
 
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/admin/sinhvien}">
-                <i class="fas fa-fw fa-user-graduate"></i>
-                <span>Quản Lý Sinh Viên</span></a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/admin/cvht}">
-                <i class="fas fa-fw fa-chalkboard-teacher"></i>
-                <span>Quản Lý CVHT</span></a>
-        </li>
-    </ul>
+    <ul th:replace="~{admin/sidebar :: sidebar}"></ul>
 
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">

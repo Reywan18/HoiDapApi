@@ -6,9 +6,11 @@ import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.answer.AnswerVer
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.question.QuestionJpaEntity;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.answer.AnswerJpaRepository;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.answer.AnswerVersionJpaRepository;
+import com.hoidap.hoidapdemo.infrastructure.adapter.web.common.AppCode;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.common.AppStatus;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.answer.AnswerHistoryResponse;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.answer.AnswerRequest;
+import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.answer.LatestAnswerResponse;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.common.ApiResponse;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.common.PageResponse;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.question.QuestionFilter;
@@ -165,6 +167,26 @@ public class QuestionController {
 
         return ResponseEntity.ok(ApiResponse.<List<AnswerHistoryResponse>>builder()
                 .status(200)
+                .data(response)
+                .build());
+    }
+
+    @GetMapping("/{id}/latest-answer")
+    public ResponseEntity<ApiResponse<LatestAnswerResponse>> getLatestAnswer(@PathVariable Long id) {
+
+        LatestAnswerResponse response = questionService.getLatestAnswer(id);
+
+        if (response == null) {
+            return ResponseEntity.ok(ApiResponse.<LatestAnswerResponse>builder()
+                    .status(200)
+                    .message("Câu hỏi chưa được trả lời")
+                    .data(null)
+                    .build());
+        }
+
+        return ResponseEntity.ok(ApiResponse.<LatestAnswerResponse>builder()
+                .status(200)
+                .message("Lấy câu trả lời thành công")
                 .data(response)
                 .build());
     }
