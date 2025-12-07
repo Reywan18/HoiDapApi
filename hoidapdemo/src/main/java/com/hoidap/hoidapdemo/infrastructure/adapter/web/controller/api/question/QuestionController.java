@@ -6,7 +6,6 @@ import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.answer.AnswerVer
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.question.QuestionJpaEntity;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.answer.AnswerJpaRepository;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.answer.AnswerVersionJpaRepository;
-import com.hoidap.hoidapdemo.infrastructure.adapter.web.common.AppCode;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.common.AppStatus;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.answer.AnswerHistoryResponse;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.answer.AnswerRequest;
@@ -25,11 +24,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/questions")
+@Tag(name = "Quản Lý Câu Hỏi", description = "Các API liên quan đến hỏi đáp giữa Sinh viên và CVHT")
 public class QuestionController {
     private final QuestionServiceImpl questionService;
     private final UserServicePort userService;
@@ -44,6 +46,7 @@ public class QuestionController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Sinh viên đặt câu hỏi mới", description = "API này cho phép sinh viên gửi câu hỏi kèm file đính kèm.")
     public ResponseEntity<?> createQuestion(
             @ModelAttribute @Valid QuestionRequest request,
             Authentication authentication) {
@@ -59,6 +62,7 @@ public class QuestionController {
     }
 
     @GetMapping
+    @Operation(summary = "Lấy danh sách câu hỏi (Có phân trang)", description = "Hỗ trợ lọc theo từ khóa, trạng thái, ngày tháng...")
     public ResponseEntity<ApiResponse<PageResponse<QuestionResponse>>> getAllQuestions(
             @ModelAttribute QuestionFilter filter,
             @RequestParam(defaultValue = "0") int page,
@@ -76,6 +80,7 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Xem chi tiết câu hỏi", description = "Lấy thông tin chi tiết dựa trên ID câu hỏi")
     public ResponseEntity<QuestionResponse> getQuestionById(@PathVariable Long id) {
         return ResponseEntity.ok(questionService.getQuestionById(id));
     }
@@ -108,6 +113,7 @@ public class QuestionController {
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "CVHT cập nhật câu trả lời", description = "CVHT cập nhật nội dung trả lời và file đính kèm cho sinh viên")
     public ResponseEntity<ApiResponse> updateQuestion(
             @PathVariable Long id,
             @ModelAttribute @Valid QuestionRequest request,
@@ -124,6 +130,7 @@ public class QuestionController {
     }
 
     @PostMapping(value = "/{id}/answer", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "CVHT trả lời câu hỏi", description = "CVHT gửi nội dung trả lời và file đính kèm cho sinh viên")
     public ResponseEntity<ApiResponse> answerQuestion(
             @PathVariable Long id,
             @ModelAttribute @Valid AnswerRequest request,
@@ -139,6 +146,7 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}/answers")
+    @Operation(summary = "Lịch sử câu trả lời", description = "Sinh viên xem lịch sử câu trả lời")
     public ResponseEntity<ApiResponse<List<AnswerHistoryResponse>>> getAnswerHistory(@PathVariable Long id) {
 
         var answerOpt = answerRepo.findByQuestion_MaCauHoi(id);
@@ -172,6 +180,7 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}/latest-answer")
+    @Operation(summary = "Câu trả lời mới nhất", description = "Sinh Viên sẽ xem câu trả lời mới nhất")
     public ResponseEntity<ApiResponse<LatestAnswerResponse>> getLatestAnswer(@PathVariable Long id) {
 
         LatestAnswerResponse response = questionService.getLatestAnswer(id);

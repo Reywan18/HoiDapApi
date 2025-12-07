@@ -12,6 +12,7 @@ import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.lop.LopJpaRe
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.sinhvien.SinhVienJpaRepository;
 import com.hoidap.hoidapdemo.infrastructure.adapter.security.JwtUtils;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.user.UserDto;
+import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.user.UserProfileResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -110,6 +111,35 @@ public class UserServiceImpl implements UserServicePort {
                 userDetails.getHoTen(),
                 userDetails.getRole()
         );
+    }
+
+    public UserProfileResponse getMyProfile(String email) {
+        var svOpt = sinhVienRepo.findByEmail(email);
+        if (svOpt.isPresent()) {
+            SinhVienJpaEntity sv = svOpt.get();
+            return UserProfileResponse.builder()
+                    .maDinhDanh(sv.getMaSv())
+                    .hoTen(sv.getHoTen())
+                    .email(sv.getEmail())
+                    .soDienThoai(sv.getSoDienThoai())
+                    .role("SINH_VIEN")
+                    .maLop(sv.getLop() != null ? sv.getLop().getMaLop() : "Chưa có lớp")
+                    .tenLop(sv.getLop() != null ? "Lớp " + sv.getLop().getMaLop() : "")
+                    .build();
+        }
+
+        var cvhtOpt = cvhtRepo.findByEmail(email);
+        if (cvhtOpt.isPresent()) {
+            CVHTJpaEntity cv = cvhtOpt.get();
+            return UserProfileResponse.builder()
+                    .maDinhDanh(cv.getMaCv())
+                    .hoTen(cv.getHoTen())
+                    .email(cv.getEmail())
+                    .soDienThoai(cv.getSoDienThoai())
+                    .role("CVHT")
+                    .build();
+        }
+        throw new IllegalArgumentException("Không tìm thấy thông tin người dùng: " + email);
     }
 
     @Override

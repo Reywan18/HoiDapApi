@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Quản lý Đăng ký, Đăng nhập")
 public class AuthController {
     private final UserServicePort userService;
 
@@ -24,6 +28,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Đăng ký")
     public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody RegisterRequest request) {
         String userId = userService.register(
                 request.getEmail(),
@@ -41,6 +46,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "Đăng nhập")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         try {
             String token = userService.login(request.getEmail(), request.getPassword());
@@ -64,6 +70,7 @@ public class AuthController {
     }
 
     @PostMapping("/profile/update")
+    @Operation(summary = "Cập nhật thông tin")
     public ResponseEntity<AuthResponse> updateProfile(@Valid @RequestBody ProfileUpdateRequest request, Authentication authentication) {
         String email = authentication.getName();
         try {

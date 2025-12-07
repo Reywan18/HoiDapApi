@@ -45,6 +45,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/register", "/api/auth/login", "/api/setup/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/questions/*/answer").hasRole("CVHT")
                         .requestMatchers("/api/questions/advisor/**").hasRole("CVHT")
+                        .requestMatchers("/api/users/**").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/questions/**").hasRole("SINH_VIEN")
                         .requestMatchers(HttpMethod.PUT, "/api/questions/**").hasRole("SINH_VIEN")
                         .requestMatchers("/api/questions/**").hasAnyRole("SINH_VIEN", "CVHT", "ADMIN")
