@@ -14,7 +14,6 @@
 
 <body id="page-top">
 <div id="wrapper">
-
     <ul th:replace="~{admin/sidebar :: sidebar}"></ul>
 
     <div id="content-wrapper" class="d-flex flex-column">
@@ -38,8 +37,7 @@
             </nav>
 
             <div class="container-fluid">
-                <h1 class="h3 mb-2 text-gray-800">Danh sách Sinh Viên</h1>
-                <a th:href="@{/admin/sinhvien/create}" class="btn btn-primary mb-3"><i class="fas fa-plus"></i> Thêm Sinh Viên</a>
+                <h1 class="h3 mb-2 text-gray-800">Quản Lý Câu Hỏi</h1>
 
                 <div class="card shadow mb-4">
                     <div class="card-body">
@@ -47,30 +45,35 @@
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
-                                    <th>Mã SV</th>
-                                    <th>Họ Tên</th>
-                                    <th>Email</th>
-                                    <th>SĐT</th>
-                                    <th>Lớp</th>
+                                    <th>ID</th>
+                                    <th>Tiêu Đề</th>
+                                    <th>Người Gửi</th>
+                                    <th>Ngày Gửi</th>
+                                    <th>Trạng Thái</th>
                                     <th>Hành động</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="sv : ${listSV}">
-                                    <td th:text="${sv.maSv}"></td>
-                                    <td th:text="${sv.hoTen}"></td>
-                                    <td th:text="${sv.email}"></td>
-                                    <td th:text="${sv.soDienThoai}"></td>
-                                    <td th:text="${sv.lop != null ? sv.lop.maLop : 'Chưa xếp'}"></td>
+                                <tr th:each="q : ${listQuestions}">
+                                    <td th:text="${q.maCauHoi}"></td>
+                                    <td th:text="${q.tieuDe}"></td>
+                                    <td th:text="${q.tenSinhVien}"></td>
+                                    <td th:text="${q.ngayGui}"></td>
                                     <td>
-                                        <a th:href="@{/admin/sinhvien/edit/{id}(id=${sv.maSv})}" class="btn btn-warning btn-sm">Sửa</a>
-                                        <a th:href="@{/admin/sinhvien/delete/{id}(id=${sv.maSv})}" class="btn btn-danger btn-sm" onclick="return confirm('Xóa sinh viên này?')">Xóa</a>
+                                        <span th:if="${q.trangThai == 'PENDING'}" class="badge badge-warning">Chờ trả lời</span>
+                                        <span th:if="${q.trangThai == 'ANSWERED'}" class="badge badge-success">Đã trả lời</span>
+                                    </td>
+                                    <td>
+                                        <a th:href="@{/admin/questions/detail/{id}(id=${q.maCauHoi})}" class="btn btn-info btn-sm">
+                                            <i class="fas fa-eye"></i> Xem
+                                        </a>
+                                        <a th:href="@{/admin/questions/edit/{id}(id=${q.maCauHoi})}" class="btn btn-warning btn-sm">Sửa</a>
+                                        <a th:href="@{/admin/questions/delete/{id}(id=${q.maCauHoi})}" class="btn btn-danger btn-sm" onclick="return confirm('Xóa câu hỏi này sẽ mất toàn bộ câu trả lời?')">Xóa</a>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
-
                     </div>
                 </div>
             </div>

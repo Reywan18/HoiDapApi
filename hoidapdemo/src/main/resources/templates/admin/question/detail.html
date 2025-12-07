@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"> <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Quản Lý Lớp Học</title>
+
+    <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+    <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet">
+</head>
+
+<body id="page-top">
+<div id="wrapper">
+    <ul th:replace="~{admin/sidebar :: sidebar}"></ul>
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <ul class="navbar-nav ml-auto">
+                    <div class="topbar-divider d-none d-sm-block"></div>
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
+                            <img class="img-profile rounded-circle" th:src="@{/img/undraw_profile.svg}">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="container-fluid">
+                <h1 class="h3 mb-4 text-gray-800">Chi Tiết Câu Hỏi #<span th:text="${question.maCauHoi}"></span></h1>
+
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Nội dung câu hỏi</h6>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Tiêu đề:</strong> <span th:text="${question.tieuDe}"></span></p>
+                                <p><strong>Người gửi:</strong> <span th:text="${question.sinhVien.hoTen}"></span></p>
+                                <p><strong>Ngày gửi:</strong> <span th:text="${question.ngayGui}"></span></p>
+                                <hr>
+                                <p><strong>Nội dung:</strong></p>
+                                <p th:text="${question.noiDung}" class="text-justify"></p>
+
+                                <div th:if="${question.fileName != null}">
+                                    <hr>
+                                    <a th:href="@{/api/questions/{id}/file(id=${question.maCauHoi})}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-paperclip"></i> Tải file đính kèm
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-7">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-success">Lịch sử trả lời (Versioning)</h6>
+                            </div>
+                            <div class="card-body">
+
+                                <div th:if="${answer == null}" class="alert alert-warning">
+                                    Câu hỏi này chưa có câu trả lời nào.
+                                </div>
+
+                                <div th:if="${answer != null}">
+                                    <p><strong>Người phụ trách:</strong> <span th:text="${answer.cvht.hoTen}"></span></p>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>Ver</th>
+                                                <th>Ngày tạo</th>
+                                                <th>Nội dung trả lời</th>
+                                                <th>File</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="ver : ${history}">
+                                                <td><span class="badge badge-secondary" th:text="'v' + ${ver.version}"></span></td>
+                                                <td th:text="${#temporals.format(ver.thoiGianTao, 'dd-MM-yyyy HH:mm')}"></td>
+                                                <td th:text="${ver.noiDung}"></td>
+                                                <td>
+                                                    <a th:if="${ver.fileName != null}"
+                                                       th:href="@{/api/questions/versions/{vid}/file(vid=${ver.id})}"
+                                                       target="_blank">
+                                                        <i class="fas fa-file-pdf text-danger"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <a th:href="@{/admin/questions}" class="btn btn-secondary">Quay lại</a>
+            </div>
+        </div>
+
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; Your Website 2025</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
+<script th:src="@{/js/sb-admin-2.min.js}"></script>
+<script th:src="@{/vendor/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/js/demo/datatables-demo.js}"></script>
+
+</body>
+</html>

@@ -28,7 +28,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -232,5 +234,41 @@ public class QuestionServiceImpl {
                 .fileName(latestVersion.getFileName())
                 .fileDownloadUrl(downloadUrl)
                 .build();
+    }
+
+    //admin
+    @Transactional
+    public void adminUpdateQuestion(Long id, QuestionRequest request) {
+        QuestionJpaEntity q = questionRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Câu hỏi không tồn tại"));
+
+        q.setTieuDe(request.getTieuDe());
+        q.setNoiDung(request.getNoiDung());
+        questionRepo.save(q);
+    }
+
+    @Transactional
+    public void deleteQuestion(Long id) {
+        AnswerJpaEntity answer = answerRepo.findByQuestion_MaCauHoi(id).orElse(null);
+        if (answer != null) {
+            answerRepo.delete(answer);
+        }
+        questionRepo.deleteById(id);
+    }
+
+    public Map<String, Object> getQuestionDetailForAdmin(Long id) {
+        QuestionJpaEntity q = getQuestionEntityById(id);
+        AnswerJpaEntity answer = answerRepo.findByQuestion_MaCauHoi(id).orElse(null);
+
+        List<AnswerVersionJpaEntity> history = (answer != null)
+                ? answerVersionRepo.findByAnswer_IdOrderByVersionDesc(answer.getId())
+                : List.of();
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("question", q);
+        result.put("answer", answer);
+        result.put("history", history);
+
+        return result;
     }
 }
