@@ -6,7 +6,11 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProfileUpdateRequest {
-    private String maLop;
+    private String hoTen;
+    private String soDienThoai;
 
+    private String newPassword;
+
+    private String maLop;
     private String chuyenMon;
 }

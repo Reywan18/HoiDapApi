@@ -11,6 +11,7 @@ import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.cvht.CVHTJpa
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.lop.LopJpaRepository;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.sinhvien.SinhVienJpaRepository;
 import com.hoidap.hoidapdemo.infrastructure.adapter.security.JwtUtils;
+import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.user.ProfileUpdateRequest;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.user.UserDto;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.user.UserProfileResponse;
 import jakarta.transaction.Transactional;
@@ -52,48 +53,48 @@ public class UserServiceImpl implements UserServicePort {
         this.adminRepo = adminRepo;
     }
 
-    @Override
-    @Transactional
-    public String register(String email, String password, String hoTen, String soDienThoai,UserRole role) {
-        if (sinhVienRepo.findByEmail(email).isPresent() || cvhtRepo.findByEmail(email).isPresent()) {
-            throw new IllegalArgumentException("Email already exists");
-        }
-
-        String hashedPassword = passwordEncoder.encode(password);
-        String generatedId;
-
-        if (role == UserRole.SINH_VIEN) {
-            String maxSvId = sinhVienRepo.findMaxMaSv();
-            generatedId = generateNextId(maxSvId, "a");
-
-            SinhVienJpaEntity sv = new SinhVienJpaEntity();
-            sv.setMaSv(generatedId);
-            sv.setEmail(email);
-            sv.setPassword(hashedPassword);
-            sv.setHoTen(hoTen);
-            sv.setSoDienThoai(soDienThoai);
-
-            sinhVienRepo.save(sv);
-            return sv.getMaSv();
-
-        } else if (role == UserRole.CVHT) {
-            String maxCvId = cvhtRepo.findMaxMaCv();
-            generatedId = generateNextId(maxCvId, "b");
-
-            CVHTJpaEntity cv = new CVHTJpaEntity();
-            cv.setMaCv(generatedId);
-            cv.setEmail(email);
-            cv.setPassword(hashedPassword);
-            cv.setHoTen(hoTen);
-            cv.setSoDienThoai(soDienThoai);
-            cv.setChuyenMon(null);
-
-            cvhtRepo.save(cv);
-            return cv.getMaCv();
-        }
-
-        throw new IllegalArgumentException("Invalid user role specified: " + role.name());
-    }
+//    @Override
+//    @Transactional
+//    public String register(String email, String password, String hoTen, String soDienThoai,UserRole role) {
+//        if (sinhVienRepo.findByEmail(email).isPresent() || cvhtRepo.findByEmail(email).isPresent()) {
+//            throw new IllegalArgumentException("Email already exists");
+//        }
+//
+//        String hashedPassword = passwordEncoder.encode(password);
+//        String generatedId;
+//
+//        if (role == UserRole.SINH_VIEN) {
+//            String maxSvId = sinhVienRepo.findMaxMaSv();
+//            generatedId = generateNextId(maxSvId, "a");
+//
+//            SinhVienJpaEntity sv = new SinhVienJpaEntity();
+//            sv.setMaSv(generatedId);
+//            sv.setEmail(email);
+//            sv.setPassword(hashedPassword);
+//            sv.setHoTen(hoTen);
+//            sv.setSoDienThoai(soDienThoai);
+//
+//            sinhVienRepo.save(sv);
+//            return sv.getMaSv();
+//
+//        } else if (role == UserRole.CVHT) {
+//            String maxCvId = cvhtRepo.findMaxMaCv();
+//            generatedId = generateNextId(maxCvId, "b");
+//
+//            CVHTJpaEntity cv = new CVHTJpaEntity();
+//            cv.setMaCv(generatedId);
+//            cv.setEmail(email);
+//            cv.setPassword(hashedPassword);
+//            cv.setHoTen(hoTen);
+//            cv.setSoDienThoai(soDienThoai);
+//            cv.setChuyenMon(null);
+//
+//            cvhtRepo.save(cv);
+//            return cv.getMaCv();
+//        }
+//
+//        throw new IllegalArgumentException("Invalid user role specified: " + role.name());
+//    }
 
     @Override
     public String login(String email, String password) {
@@ -196,33 +197,48 @@ public class UserServiceImpl implements UserServicePort {
 
     @Override
     @Transactional
-    public void updateProfile(String email, String maLop, String chuyenMon) {
-        var svOptional = sinhVienRepo.findByEmail(email);
-        if (svOptional.isPresent()) {
-            if (maLop == null) throw new IllegalArgumentException("Vui lòng cung cấp mã lớp.");
+    public void updateProfile(String email, ProfileUpdateRequest request) {
+        var svOpt = sinhVienRepo.findByEmail(email);
+        if (svOpt.isPresent()) {
+            SinhVienJpaEntity sv = svOpt.get();
 
-            SinhVienJpaEntity sv = svOptional.get();
+            if (request.getHoTen() != null) sv.setHoTen(request.getHoTen());
+            if (request.getSoDienThoai() != null) sv.setSoDienThoai(request.getSoDienThoai());
 
-            LopJpaEntity lop = lopRepo.findById(maLop)
-                    .orElseThrow(() -> new IllegalArgumentException("Mã lớp không tồn tại: " + maLop));
+            if (request.getNewPassword() != null && !request.getNewPassword().isBlank()) {
+                sv.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            }
 
-            sv.setLop(lop);
+            if (request.getMaLop() != null) {
+                LopJpaEntity lop = lopRepo.findById(request.getMaLop())
+                        .orElseThrow(() -> new IllegalArgumentException("Mã lớp không tồn tại: " + request.getMaLop()));
+                sv.setLop(lop);
+            }
+
             sinhVienRepo.save(sv);
             return;
         }
 
-        var cvhtOptional = cvhtRepo.findByEmail(email);
-        if (cvhtOptional.isPresent()) {
-            if (chuyenMon == null) throw new IllegalArgumentException("Vui lòng cung cấp chuyên môn.");
+        var cvhtOpt = cvhtRepo.findByEmail(email);
+        if (cvhtOpt.isPresent()) {
+            CVHTJpaEntity cv = cvhtOpt.get();
 
-            CVHTJpaEntity cvht = cvhtOptional.get();
+            if (request.getHoTen() != null) cv.setHoTen(request.getHoTen());
+            if (request.getSoDienThoai() != null) cv.setSoDienThoai(request.getSoDienThoai());
 
-            cvht.setChuyenMon(chuyenMon);
-            cvhtRepo.save(cvht);
+            if (request.getNewPassword() != null && !request.getNewPassword().isBlank()) {
+                cv.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            }
+
+            if (request.getChuyenMon() != null) {
+                cv.setChuyenMon(request.getChuyenMon());
+            }
+
+            cvhtRepo.save(cv);
             return;
         }
 
-        throw new UsernameNotFoundException("Không tìm thấy người dùng.");
+        throw new IllegalArgumentException("Không tìm thấy user với email: " + email);
     }
 
     //Admin SinhVien
@@ -287,4 +303,14 @@ public class UserServiceImpl implements UserServicePort {
     @Override
     @Transactional
     public void deleteCVHT(String id) { cvhtRepo.deleteById(id); }
+
+
+//    @Transactional
+//    public void changePassword(String email, ChangePasswordRequest req) {
+//        // Logic:
+//        // 1. Tìm user theo email
+//        // 2. Check passwordEncoder.matches(req.getOldPassword(), user.getPassword())
+//        // 3. Nếu đúng -> user.setPassword(passwordEncoder.encode(req.getNewPassword()))
+//        // 4. Save
+//    }
 }

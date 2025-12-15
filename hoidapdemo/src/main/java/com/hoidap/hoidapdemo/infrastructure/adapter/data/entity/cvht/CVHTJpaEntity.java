@@ -31,6 +31,9 @@ public class CVHTJpaEntity {
     @Column(name = "password", nullable = false, length = 100)
     private String password;
 
+    @Column(name = "role")
+    private String role;
+
     @OneToMany(mappedBy = "cvht", fetch = FetchType.LAZY)
     private List<LopJpaEntity> cacLopPhuTrach;
 

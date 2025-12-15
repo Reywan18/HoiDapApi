@@ -3,9 +3,13 @@ package com.hoidap.hoidapdemo.infrastructure.adapter.web.controller.api.question
 import com.hoidap.hoidapdemo.application.port.UserServicePort;
 import com.hoidap.hoidapdemo.application.service.QuestionServiceImpl;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.answer.AnswerVersionJpaEntity;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.cvht.CVHTJpaEntity;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.question.QuestionJpaEntity;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.sinhvien.SinhVienJpaEntity;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.answer.AnswerJpaRepository;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.answer.AnswerVersionJpaRepository;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.cvht.CVHTJpaRepository;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.sinhvien.SinhVienJpaRepository;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.common.AppStatus;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.answer.AnswerHistoryResponse;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.answer.AnswerRequest;
@@ -37,12 +41,20 @@ public class QuestionController {
     private final UserServicePort userService;
     private final AnswerJpaRepository answerRepo;
     private final AnswerVersionJpaRepository answerVersionRepo;
+    private final SinhVienJpaRepository sinhVienRepo;
+    private final CVHTJpaRepository cvhtRepo;
 
-    public QuestionController(QuestionServiceImpl questionService, UserServicePort userService, AnswerJpaRepository answerRepo, AnswerVersionJpaRepository answerVersionRepo) {
+    public QuestionController(
+            QuestionServiceImpl questionService, UserServicePort userService,
+            AnswerJpaRepository answerRepo, AnswerVersionJpaRepository answerVersionRepo,
+            SinhVienJpaRepository sinhVienRepo, CVHTJpaRepository cvhtRepo
+    ) {
         this.questionService = questionService;
         this.userService = userService;
         this.answerRepo = answerRepo;
         this.answerVersionRepo = answerVersionRepo;
+        this.sinhVienRepo = sinhVienRepo;
+        this.cvhtRepo = cvhtRepo;
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -66,8 +78,25 @@ public class QuestionController {
     public ResponseEntity<ApiResponse<PageResponse<QuestionResponse>>> getAllQuestions(
             @ModelAttribute QuestionFilter filter,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            Authentication authentication
     ) {
+        String email = authentication.getName();
+        String role = authentication.getAuthorities().iterator().next().getAuthority();
+
+        if (role.contains("SINH_VIEN")) {
+            SinhVienJpaEntity sv = sinhVienRepo.findByEmail(email)
+                    .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy sinh viên!"));
+
+            filter.setMaSv(sv.getMaSv());
+
+        } else if (role.contains("CVHT")) {
+            CVHTJpaEntity cv = cvhtRepo.findByEmail(email)
+                    .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy CVHT!"));
+
+            filter.setMaCv(cv.getMaCv());
+        }
+
         PageResponse<QuestionResponse> pageData = questionService.getAllQuestions(filter, page, size);
 
         ApiResponse<PageResponse<QuestionResponse>> response = ApiResponse.<PageResponse<QuestionResponse>>builder()

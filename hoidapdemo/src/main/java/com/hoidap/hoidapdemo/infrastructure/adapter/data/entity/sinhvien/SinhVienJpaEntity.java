@@ -26,6 +26,9 @@ public class SinhVienJpaEntity {
     @Column(name = "password", nullable = false, length = 100)
     private String password;
 
+    @Column(name = "role")
+    private String role;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ma_lop", referencedColumnName = "ma_lop")
     private LopJpaEntity lop;

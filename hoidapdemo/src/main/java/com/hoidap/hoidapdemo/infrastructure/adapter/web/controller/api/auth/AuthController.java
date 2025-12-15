@@ -27,23 +27,23 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
-    @Operation(summary = "Đăng ký")
-    public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody RegisterRequest request) {
-        String userId = userService.register(
-                request.getEmail(),
-                request.getPassword(),
-                request.getHoTen(),
-                request.getSoDienThoai(),
-                request.getRole()
-        );
-
-        AuthResponse response = AuthResponse.builder()
-                .status(AppStatus.SUCCESS.getCode())
-                .message(AppStatus.SUCCESS.getMessage())
-                .build();
-        return ResponseEntity.ok(response);
-    }
+//    @PostMapping("/register")
+//    @Operation(summary = "Đăng ký")
+//    public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody RegisterRequest request) {
+//        String userId = userService.register(
+//                request.getEmail(),
+//                request.getPassword(),
+//                request.getHoTen(),
+//                request.getSoDienThoai(),
+//                request.getRole()
+//        );
+//
+//        AuthResponse response = AuthResponse.builder()
+//                .status(AppStatus.SUCCESS.getCode())
+//                .message(AppStatus.SUCCESS.getMessage())
+//                .build();
+//        return ResponseEntity.ok(response);
+//    }
 
     @PostMapping("/login")
     @Operation(summary = "Đăng nhập")
@@ -74,7 +74,7 @@ public class AuthController {
     public ResponseEntity<AuthResponse> updateProfile(@Valid @RequestBody ProfileUpdateRequest request, Authentication authentication) {
         String email = authentication.getName();
         try {
-            userService.updateProfile(email, request.getMaLop(), request.getChuyenMon());
+            userService.updateProfile(email, request);
 
             return ResponseEntity.ok(AuthResponse.builder()
                     .status(AppStatus.SUCCESS.getCode())
