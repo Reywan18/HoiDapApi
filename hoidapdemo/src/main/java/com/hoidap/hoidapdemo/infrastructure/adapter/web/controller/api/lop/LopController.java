@@ -1,17 +1,18 @@
 package com.hoidap.hoidapdemo.infrastructure.adapter.web.controller.api.lop;
 
 import com.hoidap.hoidapdemo.application.port.LopServicePort;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.lop.LopJpaEntity;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.common.AppStatus;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.common.ApiResponse;
-import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.lop.CreateLopRequest;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/classes")
@@ -23,14 +24,27 @@ public class LopController {
         this.lopService = lopService;
     }
 
-    @PostMapping("/create")
-    @Operation(summary = "Tạo lớp mới", description = "API này cho phép tạo lớp mới")
-    public ResponseEntity<ApiResponse> createLop(@Valid @RequestBody CreateLopRequest request) {
-        lopService.createLop(request);
+    @GetMapping
+    @Operation(summary = "Lấy danh sách tất cả lớp học", description = "Trả về Mã lớp và Tên hiển thị (Ngành)")
+    public ResponseEntity<ApiResponse<List<Map<String, String>>>> getAllLops() {
 
-        return ResponseEntity.ok(ApiResponse.builder()
+        List<LopJpaEntity> entities = lopService.getAllLop();
+
+        List<Map<String, String>> data = entities.stream().map(lop -> {
+            Map<String, String> item = new HashMap<>();
+            item.put("maLop", lop.getMaLop());
+            String tenHienThi = lop.getMaLop();
+            if (lop.getChuyenNganh() != null) {
+                tenHienThi += " - " + lop.getChuyenNganh();
+            }
+            item.put("tenHienThi", tenHienThi);
+            return item;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(ApiResponse.<List<Map<String, String>>>builder()
                 .status(AppStatus.SUCCESS.getCode())
-                .message("Tạo lớp thành công: " + request.getMaLop())
+                .message("Lấy danh sách lớp thành công")
+                .data(data)
                 .build());
     }
 }

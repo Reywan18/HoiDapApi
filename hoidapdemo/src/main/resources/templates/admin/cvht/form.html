@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"> <head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Biểu mẫu Lớp học</title>
+    <title>Cập Nhật Cố Vấn</title>
 
     <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -12,36 +13,36 @@
 
 <body id="page-top">
 <div id="wrapper">
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin/lop">
-            <div class="sidebar-brand-text mx-3">Admin</div>
-        </a>
-    </ul>
+    <ul th:replace="~{admin/sidebar :: sidebar}"></ul>
 
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
-            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"></nav>
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+            </nav>
 
             <div class="container-fluid">
-                <h1 class="h3 mb-4 text-gray-800" th:text="${isEdit} ? 'Sửa CVHT' : 'Thêm CVHT'"></h1>
+                <h1 class="h3 mb-4 text-gray-800">Cập nhật thông tin CVHT</h1>
 
                 <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Thông tin chi tiết</h6>
+                    </div>
                     <div class="card-body">
                         <form th:action="@{/admin/cvht/save}" th:object="${cvht}" method="post">
 
                             <div class="form-group">
                                 <label>Mã Cố Vấn</label>
-                                <input type="text" class="form-control" th:field="*{maCv}" th:readonly="${isEdit}" placeholder="Nhập mã (VD: CV01)">
+                                <input type="text" class="form-control" th:field="*{maCv}" readonly style="background-color: #eaecf4;">
                             </div>
 
                             <div class="form-group">
                                 <label>Họ Tên</label>
-                                <input type="text" class="form-control" th:field="*{hoTen}" required>
+                                <input type="text" class="form-control" th:field="*{hoTen}">
                             </div>
 
                             <div class="form-group">
                                 <label>Email</label>
-                                <input type="email" class="form-control" th:field="*{email}" required>
+                                <input type="email" class="form-control" th:field="*{email}" readonly style="background-color: #eaecf4;">
                             </div>
 
                             <div class="form-group">
@@ -55,13 +56,19 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Mật khẩu</label>
-                                <input type="password" class="form-control" th:field="*{password}" placeholder="Để trống nếu không đổi">
+                                <label>Mật khẩu mới</label>
+                                <input type="password" class="form-control" th:field="*{password}" placeholder="Để trống nếu không đổi mật khẩu">
+                                <small class="text-muted">Chỉ nhập nếu bạn muốn reset mật khẩu cho giảng viên này.</small>
                             </div>
 
                             <hr>
-                            <button type="submit" class="btn btn-success">Lưu Lại</button>
-                            <a th:href="@{/admin/cvht}" class="btn btn-secondary">Hủy</a>
+                            <button type="submit" class="btn btn-success btn-icon-split">
+                                <span class="icon text-white-50"><i class="fas fa-save"></i></span>
+                                <span class="text">Lưu Lại</span>
+                            </button>
+                            <a th:href="@{/admin/cvht}" class="btn btn-secondary btn-icon-split">
+                                <span class="text">Quay lại</span>
+                            </a>
                         </form>
                     </div>
                 </div>

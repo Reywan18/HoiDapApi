@@ -4,6 +4,7 @@ import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.lop.LopJpaEntity
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "sinh_vien")
@@ -31,5 +32,6 @@ public class SinhVienJpaEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ma_lop", referencedColumnName = "ma_lop")
+    @ToString.Exclude
     private LopJpaEntity lop;
 }

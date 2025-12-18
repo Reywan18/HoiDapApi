@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"> <head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Quản Lý Lớp Học</title>
+    <title>Quản Lý Sinh Viên</title>
 
     <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
     <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
     <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet">
 </head>
@@ -29,8 +29,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Logout
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
                             </a>
                         </div>
                     </li>
@@ -38,10 +37,17 @@
             </nav>
 
             <div class="container-fluid">
-                <h1 class="h3 mb-2 text-gray-800">Danh sách Sinh Viên</h1>
-                <a th:href="@{/admin/sinhvien/create}" class="btn btn-primary mb-3"><i class="fas fa-plus"></i> Thêm Sinh Viên</a>
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Danh sách Sinh Viên</h1>
+                    <button type="button" class="btn btn-primary shadow-sm" data-toggle="modal" data-target="#createStudentModal">
+                        <i class="fas fa-plus fa-sm text-white-50"></i> Cấp Tài Khoản Mới
+                    </button>
+                </div>
 
                 <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Dữ liệu sinh viên</h6>
+                    </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -63,14 +69,17 @@
                                     <td th:text="${sv.soDienThoai}"></td>
                                     <td th:text="${sv.lop != null ? sv.lop.maLop : 'Chưa xếp'}"></td>
                                     <td>
-                                        <a th:href="@{/admin/sinhvien/edit/{id}(id=${sv.maSv})}" class="btn btn-warning btn-sm">Sửa</a>
-                                        <a th:href="@{/admin/sinhvien/delete/{id}(id=${sv.maSv})}" class="btn btn-danger btn-sm" onclick="return confirm('Xóa sinh viên này?')">Xóa</a>
+                                        <a th:href="@{/admin/sinhvien/edit/{id}(id=${sv.maSv})}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-pen"></i> Sửa
+                                        </a>
+                                        <a th:href="@{/admin/sinhvien/delete/{id}(id=${sv.maSv})}" class="btn btn-danger btn-sm" onclick="return confirm('Xóa sinh viên này?')">
+                                            <i class="fas fa-trash"></i> Xóa
+                                        </a>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -86,6 +95,60 @@
     </div>
 </div>
 
+<div class="modal fade" id="createStudentModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modalLabel">Cấp tài khoản Sinh Viên</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="createForm">
+                    <div class="form-group">
+                        <label>Mã Sinh Viên <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="newMaSv" placeholder="VD: a00123" oninput="autoFillEmail()">
+                        <small class="text-muted">Nhập mã SV, hệ thống sẽ tự điền Email chuẩn.</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Email (Tự động)</label>
+                        <input type="text" class="form-control bg-light" id="newEmail" readonly>
+                    </div>
+                    <div id="apiError" class="alert alert-danger d-none"></div>
+                </div>
+
+                <div id="resultBox" class="text-center d-none">
+                    <div class="mb-3">
+                        <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="text-success">Tạo tài khoản thành công!</h5>
+                    <p>Hãy gửi thông tin đăng nhập này cho sinh viên:</p>
+
+                    <div class="card bg-light border-left-success py-2">
+                        <div class="card-body">
+                            <p class="mb-1">Tài khoản: <strong id="resEmail"></strong></p>
+                            <p class="mb-0">Mật khẩu: <strong id="resPass" class="text-danger" style="font-size: 1.4rem;"></strong></p>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-primary btn-sm mt-3" onclick="copyPassword()">Sao chép mật khẩu</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div id="footerForm">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" onclick="submitCreateStudent()">
+                        <i class="fas fa-save"></i> Tạo Tài Khoản
+                    </button>
+                </div>
+                <div id="footerResult" class="d-none">
+                    <button type="button" class="btn btn-success" onclick="location.reload()">Hoàn tất (Tải lại trang)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
 <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
@@ -93,6 +156,83 @@
 <script th:src="@{/vendor/datatables/jquery.dataTables.min.js}"></script>
 <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
 <script th:src="@{/js/demo/datatables-demo.js}"></script>
+
+<script>
+    // 1. Tự động điền email
+    function autoFillEmail() {
+        let id = document.getElementById("newMaSv").value.trim();
+        if(id) {
+            document.getElementById("newEmail").value = id.toLowerCase() + "@thanglong.edu.vn";
+        } else {
+            document.getElementById("newEmail").value = "";
+        }
+    }
+
+    // 2. Gọi API tạo tài khoản
+    async function submitCreateStudent() {
+        // Reset lỗi cũ
+        document.getElementById("apiError").classList.add("d-none");
+
+        let maSv = document.getElementById("newMaSv").value;
+        let email = document.getElementById("newEmail").value;
+
+        // Kiểm tra sơ bộ
+        if(!maSv) {
+            alert("Vui lòng nhập Mã Sinh Viên!");
+            return;
+        }
+
+        // Token lấy từ localStorage (nếu login API) hoặc bỏ qua nếu login Session
+        let token = localStorage.getItem("accessToken");
+
+        let data = {
+            "maDinhDanh": maSv,
+            "email": email
+        };
+
+        try {
+            // Gọi vào API bạn đã tạo ở Backend
+            let response = await fetch('/api/admin/accounts/student', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'Authorization': `Bearer ${token}` // Bỏ comment nếu cần JWT
+                },
+                body: JSON.stringify(data)
+            });
+
+            let result = await response.json();
+
+            if (response.ok) {
+                // Thành công: Ẩn form, hiện kết quả
+                document.getElementById("createForm").classList.add("d-none");
+                document.getElementById("footerForm").classList.add("d-none");
+
+                document.getElementById("resultBox").classList.remove("d-none");
+                document.getElementById("footerResult").classList.remove("d-none");
+
+                // Điền dữ liệu trả về
+                document.getElementById("resEmail").innerText = result.data.email;
+                document.getElementById("resPass").innerText = result.data.generatedPassword;
+            } else {
+                // Thất bại: Hiện lỗi
+                let errDiv = document.getElementById("apiError");
+                errDiv.classList.remove("d-none");
+                errDiv.innerText = result.message || "Lỗi tạo tài khoản";
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Lỗi kết nối đến Server!");
+        }
+    }
+
+    // 3. Tiện ích copy
+    function copyPassword() {
+        let pass = document.getElementById("resPass").innerText;
+        navigator.clipboard.writeText(pass);
+        alert("Đã sao chép mật khẩu!");
+    }
+</script>
 
 </body>
 </html>

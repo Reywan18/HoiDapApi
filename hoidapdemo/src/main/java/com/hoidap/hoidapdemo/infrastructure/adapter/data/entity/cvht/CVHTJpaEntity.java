@@ -4,6 +4,7 @@ import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.lop.LopJpaEntity
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class CVHTJpaEntity {
     private String role;
 
     @OneToMany(mappedBy = "cvht", fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<LopJpaEntity> cacLopPhuTrach;
 
 }

@@ -4,6 +4,8 @@ import com.hoidap.hoidapdemo.application.port.LopServicePort;
 import com.hoidap.hoidapdemo.application.port.UserServicePort;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.cvht.CVHTJpaEntity;
 import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.sinhvien.SinhVienJpaEntity;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.lop.LopJpaRepository;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.sinhvien.SinhVienJpaRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,12 +13,19 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/admin")
 public class UserAdminController {
+    private final SinhVienJpaRepository sinhVienRepo;
+    private final LopJpaRepository lopRepo;
     private final UserServicePort userService;
     private final LopServicePort lopService;
 
-    public UserAdminController(UserServicePort userService, LopServicePort lopService) {
+    public UserAdminController(
+            UserServicePort userService, LopServicePort lopService,
+            SinhVienJpaRepository sinhVienRepo, LopJpaRepository lopRepo
+    ) {
         this.lopService = lopService;
         this.userService = userService;
+        this.sinhVienRepo = sinhVienRepo;
+        this.lopRepo = lopRepo;
     }
 
     //Quan ly Sinh Vien
@@ -36,12 +45,11 @@ public class UserAdminController {
 
     @GetMapping("/sinhvien/edit/{id}")
     public String formEditSV(@PathVariable String id, Model model) {
-        SinhVienJpaEntity sv = userService.getSinhVienById(id);
-        sv.setPassword("");
+        SinhVienJpaEntity sv = sinhVienRepo.findById(id).orElseThrow();
 
         model.addAttribute("sinhVien", sv);
-        model.addAttribute("listLop", lopService.getAllLop());
-        model.addAttribute("isEdit", true);
+        model.addAttribute("listLop", lopRepo.findAll());
+
         return "admin/sinhvien/form";
     }
 

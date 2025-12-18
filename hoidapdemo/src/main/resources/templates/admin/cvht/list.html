@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"> <head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Quản Lý Lớp Học</title>
+  <title>Quản Lý Cố Vấn Học Tập</title>
 
   <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
   <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
   <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet">
 </head>
 
 <body id="page-top">
 <div id="wrapper">
+
   <ul th:replace="~{admin/sidebar :: sidebar}"></ul>
 
   <div id="content-wrapper" class="d-flex flex-column">
@@ -28,8 +29,7 @@
             </a>
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
               <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                Logout
+                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
               </a>
             </div>
           </li>
@@ -37,10 +37,17 @@
       </nav>
 
       <div class="container-fluid">
-        <h1 class="h3 mb-2 text-gray-800">Danh sách Cố Vấn Học Tập</h1>
-        <a th:href="@{/admin/cvht/create}" class="btn btn-primary mb-3"><i class="fas fa-plus"></i> Thêm CVHT</a>
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+          <h1 class="h3 mb-0 text-gray-800">Danh sách Cố Vấn Học Tập</h1>
+          <button type="button" class="btn btn-primary shadow-sm" data-toggle="modal" data-target="#createAdvisorModal">
+            <i class="fas fa-plus fa-sm text-white-50"></i> Cấp Tài Khoản Mới
+          </button>
+        </div>
 
         <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Dữ liệu giảng viên</h6>
+          </div>
           <div class="card-body">
             <div class="table-responsive">
               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -60,8 +67,12 @@
                   <td th:text="${cv.email}"></td>
                   <td th:text="${cv.chuyenMon}"></td>
                   <td>
-                    <a th:href="@{/admin/cvht/edit/{id}(id=${cv.maCv})}" class="btn btn-warning btn-sm">Sửa</a>
-                    <a th:href="@{/admin/cvht/delete/{id}(id=${cv.maCv})}" class="btn btn-danger btn-sm" onclick="return confirm('Xóa CVHT này?')">Xóa</a>
+                    <a th:href="@{/admin/cvht/edit/{id}(id=${cv.maCv})}" class="btn btn-warning btn-sm">
+                      <i class="fas fa-pen"></i> Sửa
+                    </a>
+                    <a th:href="@{/admin/cvht/delete/{id}(id=${cv.maCv})}" class="btn btn-danger btn-sm" onclick="return confirm('Xóa CVHT này?')">
+                      <i class="fas fa-trash"></i> Xóa
+                    </a>
                   </td>
                 </tr>
                 </tbody>
@@ -82,6 +93,60 @@
   </div>
 </div>
 
+<div class="modal fade" id="createAdvisorModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="modalLabel">Cấp tài khoản Cố Vấn</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="createFormCv">
+          <div class="form-group">
+            <label>Mã Cố Vấn <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="newMaCv" placeholder="VD: b00001" oninput="autoFillEmailCv()">
+            <small class="text-muted">Nhập mã, hệ thống tự điền Email.</small>
+          </div>
+          <div class="form-group">
+            <label>Email (Tự động)</label>
+            <input type="text" class="form-control bg-light" id="newEmailCv" readonly>
+          </div>
+          <div id="apiErrorCv" class="alert alert-danger d-none"></div>
+        </div>
+
+        <div id="resultBoxCv" class="text-center d-none">
+          <div class="mb-3">
+            <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
+          </div>
+          <h5 class="text-success">Tạo tài khoản thành công!</h5>
+          <p>Gửi thông tin này cho giảng viên:</p>
+
+          <div class="card bg-light border-left-success py-2">
+            <div class="card-body">
+              <p class="mb-1">Tài khoản: <strong id="resEmailCv"></strong></p>
+              <p class="mb-0">Mật khẩu: <strong id="resPassCv" class="text-danger" style="font-size: 1.4rem;"></strong></p>
+            </div>
+          </div>
+          <button class="btn btn-outline-success btn-sm mt-3" onclick="copyPasswordCv()">Sao chép mật khẩu</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div id="footerFormCv">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+          <button type="button" class="btn btn-success" onclick="submitCreateAdvisor()">
+            <i class="fas fa-save"></i> Tạo Tài Khoản
+          </button>
+        </div>
+        <div id="footerResultCv" class="d-none">
+          <button type="button" class="btn btn-success" onclick="location.reload()">Hoàn tất (Tải lại trang)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
 <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
@@ -89,6 +154,77 @@
 <script th:src="@{/vendor/datatables/jquery.dataTables.min.js}"></script>
 <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
 <script th:src="@{/js/demo/datatables-demo.js}"></script>
+
+<script>
+  // 1. Auto Email
+  function autoFillEmailCv() {
+      let id = document.getElementById("newMaCv").value.trim();
+      if(id) {
+          document.getElementById("newEmailCv").value = id.toLowerCase() + "@thanglong.edu.vn";
+      } else {
+          document.getElementById("newEmailCv").value = "";
+      }
+  }
+
+  // 2. Call API
+  async function submitCreateAdvisor() {
+      document.getElementById("apiErrorCv").classList.add("d-none");
+
+      let maCv = document.getElementById("newMaCv").value;
+      let email = document.getElementById("newEmailCv").value;
+
+      if(!maCv) {
+          alert("Vui lòng nhập Mã Cố Vấn!");
+          return;
+      }
+
+      let token = localStorage.getItem("accessToken");
+      let data = {
+          "maDinhDanh": maCv,
+          "email": email
+      };
+
+      try {
+          // Gọi vào API tạo CVHT
+          let response = await fetch('/api/admin/accounts/advisor', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  // 'Authorization': `Bearer ${token}` // Bỏ comment nếu cần JWT
+              },
+              body: JSON.stringify(data)
+          });
+
+          let result = await response.json();
+
+          if (response.ok) {
+              // Success
+              document.getElementById("createFormCv").classList.add("d-none");
+              document.getElementById("footerFormCv").classList.add("d-none");
+
+              document.getElementById("resultBoxCv").classList.remove("d-none");
+              document.getElementById("footerResultCv").classList.remove("d-none");
+
+              document.getElementById("resEmailCv").innerText = result.data.email;
+              document.getElementById("resPassCv").innerText = result.data.generatedPassword;
+          } else {
+              // Error
+              let errDiv = document.getElementById("apiErrorCv");
+              errDiv.classList.remove("d-none");
+              errDiv.innerText = result.message || "Lỗi tạo tài khoản";
+          }
+      } catch (e) {
+          console.error(e);
+          alert("Lỗi kết nối Server!");
+      }
+  }
+
+  function copyPasswordCv() {
+      let pass = document.getElementById("resPassCv").innerText;
+      navigator.clipboard.writeText(pass);
+      alert("Đã sao chép mật khẩu!");
+  }
+</script>
 
 </body>
 </html>
