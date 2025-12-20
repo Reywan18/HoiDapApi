@@ -1,20 +1,24 @@
 package com.hoidap.hoidapdemo.infrastructure.adapter.web.controller.api.auth;
 
 import com.hoidap.hoidapdemo.application.port.UserServicePort;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.entity.sinhvien.SinhVienJpaEntity;
+import com.hoidap.hoidapdemo.infrastructure.adapter.data.repository.sinhvien.SinhVienJpaRepository;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.auth.AuthResponse;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.auth.LoginRequest;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.auth.RegisterRequest;
+import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.common.ApiResponse;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.dto.user.ProfileUpdateRequest;
 import org.springframework.http.ResponseEntity;
 import com.hoidap.hoidapdemo.infrastructure.adapter.web.common.AppStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -22,9 +26,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Quản lý Đăng ký, Đăng nhập")
 public class AuthController {
     private final UserServicePort userService;
+    private final SinhVienJpaRepository sinhVienRepo;
 
-    public AuthController(UserServicePort userService) {
+    public AuthController(UserServicePort userService, SinhVienJpaRepository sinhVienRepo) {
         this.userService = userService;
+        this.sinhVienRepo = sinhVienRepo;
     }
 
 //    @PostMapping("/register")
@@ -91,5 +97,33 @@ public class AuthController {
                     .message(AppStatus.INTERNAL_ERROR.getMessage())
                     .build());
         }
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getProfile() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String currentEmail = auth.getName();
+
+        SinhVienJpaEntity sv = sinhVienRepo.findByEmail(currentEmail)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy sinh viên!"));
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("maSv", sv.getMaSv());
+        data.put("hoTen", sv.getHoTen());
+        data.put("email", sv.getEmail());
+
+        if (sv.getLop() != null && sv.getLop().getCvht() != null) {
+            data.put("cvhtMa", sv.getLop().getCvht().getMaCv());
+            data.put("cvhtHoTen", sv.getLop().getCvht().getHoTen());
+        } else {
+            data.put("cvhtMa", null);
+            data.put("cvhtHoTen", null);
+        }
+
+        return ResponseEntity.ok(ApiResponse.<Map<String, Object>>builder()
+                .status(AppStatus.SUCCESS.getCode())
+                .message("Lấy thông tin thành công")
+                .data(data)
+                .build());
     }
 }

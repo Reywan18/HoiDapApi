@@ -14,4 +14,7 @@ public class UserProfileResponse {
 
     private String maLop;
     private String tenLop;
+
+    private String maCoVan;
+    private String tenCoVan;
 }

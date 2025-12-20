@@ -118,6 +118,24 @@ public class UserServiceImpl implements UserServicePort {
         var svOpt = sinhVienRepo.findByEmail(email);
         if (svOpt.isPresent()) {
             SinhVienJpaEntity sv = svOpt.get();
+
+            String maLop = "Chưa có lớp";
+            String tenLop = "";
+            String maCoVan = null;
+            String tenCoVan = null;
+
+            if (sv.getLop() != null) {
+                maLop = sv.getLop().getMaLop();
+                tenLop = "Lớp " + sv.getLop().getMaLop();
+
+                var cvhtCuaLop = sv.getLop().getCvht();
+
+                if (cvhtCuaLop != null) {
+                    maCoVan = cvhtCuaLop.getMaCv();
+                    tenCoVan = cvhtCuaLop.getHoTen();
+                }
+            }
+
             return UserProfileResponse.builder()
                     .maDinhDanh(sv.getMaSv())
                     .hoTen(sv.getHoTen())
@@ -126,6 +144,8 @@ public class UserServiceImpl implements UserServicePort {
                     .role("SINH_VIEN")
                     .maLop(sv.getLop() != null ? sv.getLop().getMaLop() : "Chưa có lớp")
                     .tenLop(sv.getLop() != null ? "Lớp " + sv.getLop().getMaLop() : "")
+                    .maCoVan(maCoVan)
+                    .tenCoVan(tenCoVan)
                     .build();
         }
 
