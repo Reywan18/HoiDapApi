@@ -189,6 +189,22 @@ public class QuestionServiceImpl {
                     .toUriString();
         }
 
+        String maLop = "";
+        String chuyenNganh = "";
+        String khoaHoc = "";
+
+        if (q.getSinhVien() != null && q.getSinhVien().getLop() != null) {
+            maLop = q.getSinhVien().getLop().getMaLop();
+            if (q.getSinhVien().getLop().getChuyenNganh() != null) {
+                chuyenNganh = q.getSinhVien().getLop().getChuyenNganh();
+            }
+            if (q.getSinhVien().getLop().getKhoaHoc() != null) {
+                khoaHoc = q.getSinhVien().getLop().getKhoaHoc();
+            }
+        } else {
+            maLop = "Chưa có lớp";
+        }
+
         return QuestionResponse.builder()
                 .maCauHoi(q.getMaCauHoi())
                 .tieuDe(q.getTieuDe())
@@ -202,6 +218,9 @@ public class QuestionServiceImpl {
                 .tenCvht(q.getCvht() != null ? q.getCvht().getHoTen() : null)
                 .fileName(q.getFileName())
                 .fileDownloadUri(downloadUri)
+                .maLop(maLop)
+                .chuyenNganh(chuyenNganh)
+                .khoaHoc(khoaHoc)
                 .build();
     }
 

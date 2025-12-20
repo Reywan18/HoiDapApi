@@ -22,4 +22,8 @@ public class QuestionResponse {
 
     private String fileDownloadUri;
     private String fileName;
+
+    private String maLop;
+    private String chuyenNganh;
+    private String khoaHoc;
 }
