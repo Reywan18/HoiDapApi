@@ -10,6 +10,12 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OpenApiConfig {
+    /**
+     * Cấu hình chính cho Swagger/OpenAPI.
+     * 1. Thiết lập Tiêu đề, Phiên bản, Mô tả cho trang tài liệu.
+     * 2. Cấu hình nút "Authorize" (ổ khóa) để test API cần đăng nhập.
+     * Sử dụng cơ chế Bearer Token (JWT).
+     */
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()

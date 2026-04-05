@@ -3,6 +3,9 @@ package com.hoidap.hoidapdemo.controller.api.auth;
 import com.hoidap.hoidapdemo.service.port.UserServicePort;
 import com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity;
 import com.hoidap.hoidapdemo.repository.sinhvien.SinhVienJpaRepository;
+import com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity;
+import com.hoidap.hoidapdemo.repository.cvht.CVHTJpaRepository;
+import java.util.Optional;
 import com.hoidap.hoidapdemo.dto.auth.AuthResponse;
 import com.hoidap.hoidapdemo.dto.auth.LoginRequest;
 import com.hoidap.hoidapdemo.dto.common.ApiResponse;
@@ -24,12 +27,15 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 @Tag(name = "Quản lý Đăng ký, Đăng nhập")
 public class AuthController {
+    // dependencies
     private final UserServicePort userService;
     private final SinhVienJpaRepository sinhVienRepo;
+    private final CVHTJpaRepository cvhtRepo;
 
-    public AuthController(UserServicePort userService, SinhVienJpaRepository sinhVienRepo) {
+    public AuthController(UserServicePort userService, SinhVienJpaRepository sinhVienRepo, CVHTJpaRepository cvhtRepo) {
         this.userService = userService;
         this.sinhVienRepo = sinhVienRepo;
+        this.cvhtRepo = cvhtRepo;
     }
 
 //    @PostMapping("/register")
@@ -50,6 +56,14 @@ public class AuthController {
 //        return ResponseEntity.ok(response);
 //    }
 
+    /**
+     * API Đăng nhập.
+     * @param request: Chứa Email và Password người dùng nhập.
+     * Logic:
+     * 1. Gọi Service kiểm tra email/pass.
+     * 2. Nếu đúng -> Sinh ra chuỗi JWT Token.
+     * 3. Trả Token về cho Frontend lưu (thường lưu ở LocalStorage).
+     */
     @PostMapping("/login")
     @Operation(summary = "Đăng nhập")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
@@ -74,6 +88,10 @@ public class AuthController {
         }
     }
 
+    /**
+     * API Cập nhật thông tin cá nhân (SĐT, Họ tên...).
+     * @param authentication: Lấy từ Security Context để biết ai đang gọi API này (không cho sửa hộ người khác).
+     */
     @PostMapping("/profile/update")
     @Operation(summary = "Cập nhật thông tin")
     public ResponseEntity<AuthResponse> updateProfile(@Valid @RequestBody ProfileUpdateRequest request, Authentication authentication) {
@@ -98,25 +116,49 @@ public class AuthController {
         }
     }
 
+    /**
+     * API lấy thông tin Profile cơ bản (Dành cho Header/Sidebar của Frontend).
+     * Bao gồm cả thông tin Cố vấn học tập (CVHT) của sinh viên đó để hiển thị.
+     */
     @GetMapping("/profile")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getProfile() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentEmail = auth.getName();
 
-        SinhVienJpaEntity sv = sinhVienRepo.findByEmail(currentEmail)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy sinh viên!"));
-
         Map<String, Object> data = new HashMap<>();
-        data.put("maSv", sv.getMaSv());
-        data.put("hoTen", sv.getHoTen());
-        data.put("email", sv.getEmail());
 
-        if (sv.getLop() != null && sv.getLop().getCvht() != null) {
-            data.put("cvhtMa", sv.getLop().getCvht().getMaCv());
-            data.put("cvhtHoTen", sv.getLop().getCvht().getHoTen());
+        Optional<SinhVienJpaEntity> svOpt = sinhVienRepo.findByEmail(currentEmail);
+        
+        if (svOpt.isPresent()) {
+            SinhVienJpaEntity sv = svOpt.get();
+            data.put("maSv", sv.getMaSv());
+            data.put("maDinhDanh", sv.getMaSv());
+            data.put("hoTen", sv.getHoTen());
+            data.put("email", sv.getEmail());
+            data.put("soDienThoai", sv.getSoDienThoai());
+            data.put("role", "SINH_VIEN");
+
+            if (sv.getLop() != null) {
+                data.put("maLop", sv.getLop().getMaLop());
+                data.put("chuyenMon", sv.getLop().getChuyenNganh());
+                if (sv.getLop().getCvht() != null) {
+                    data.put("cvhtMa", sv.getLop().getCvht().getMaCv());
+                    data.put("cvhtHoTen", sv.getLop().getCvht().getHoTen());
+                }
+            }
         } else {
-            data.put("cvhtMa", null);
-            data.put("cvhtHoTen", null);
+            Optional<CVHTJpaEntity> cvhtOpt = cvhtRepo.findByEmail(currentEmail);
+            if (cvhtOpt.isPresent()) {
+                CVHTJpaEntity cvht = cvhtOpt.get();
+                data.put("maCv", cvht.getMaCv());
+                data.put("maDinhDanh", cvht.getMaCv());
+                data.put("hoTen", cvht.getHoTen());
+                data.put("email", cvht.getEmail());
+                data.put("soDienThoai", cvht.getSoDienThoai());
+                data.put("role", "CVHT");
+            } else {
+                throw new RuntimeException("Không tìm thấy account cho email: " + currentEmail);
+            }
         }
 
         return ResponseEntity.ok(ApiResponse.<Map<String, Object>>builder()

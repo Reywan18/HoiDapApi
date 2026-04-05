@@ -13,6 +13,11 @@ import java.util.Objects;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    /**
+     * Xử lý lỗi IllegalArgumentException.
+     * Thường được ném ra thủ công trong Service khi logic nghiệp vụ sai
+     * (Ví dụ: Tài khoản đã tồn tại, mật khẩu sai...).
+     */
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<AuthResponse> handleArgumentException(IllegalArgumentException e) {
         AppStatus status = AppStatus.USER_ALREADY_EXISTS;

@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8080
   error:
     include-message: always
     include-binding-errors: always
@@ -13,12 +13,18 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         show_sql: true
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: "1"
+
   logging:
     level:
       org.springframework.web: DEBUG

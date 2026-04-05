@@ -24,6 +24,11 @@ public class LopController {
         this.lopService = lopService;
     }
 
+    /**
+     * Lấy danh sách lớp học.
+     * Thường được gọi khi User đăng ký tài khoản hoặc Admin tạo sinh viên mới (để chọn lớp).
+     * Trả về dạng Map đơn giản: { "maLop": "...", "tenHienThi": "..." } để Frontend dễ hiển thị.
+     */
     @GetMapping
     @Operation(summary = "Lấy danh sách tất cả lớp học", description = "Trả về Mã lớp và Tên hiển thị (Ngành)")
     public ResponseEntity<ApiResponse<List<Map<String, String>>>> getAllLops() {

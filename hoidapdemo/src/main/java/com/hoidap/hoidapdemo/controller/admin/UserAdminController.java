@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/admin")
 public class UserAdminController {
+    // Khai báo dependency
     private final SinhVienJpaRepository sinhVienRepo;
     private final LopJpaRepository lopRepo;
     private final UserServicePort userService;

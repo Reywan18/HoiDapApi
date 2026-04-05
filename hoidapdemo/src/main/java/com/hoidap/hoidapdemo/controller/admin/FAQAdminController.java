@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/admin/faq")
 public class FAQAdminController {
+    // dependencies
     private final FAQJpaRepository faqRepo;
 
     public FAQAdminController(FAQJpaRepository faqRepo) {
         this.faqRepo = faqRepo;
     }
 
-    // 1. Danh sách (List) + Tìm kiếm
+    // Danh sách (List) + Tìm kiếm
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public String index(Model model, @ModelAttribute FAQFilter filter) {
@@ -27,7 +28,7 @@ public class FAQAdminController {
         return "admin/faq/list";
     }
 
-    // 2. Form Thêm mới
+    // Form Thêm mới
     @GetMapping("/create")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String create(Model model) {
@@ -36,7 +37,7 @@ public class FAQAdminController {
         return "admin/faq/form";
     }
 
-    // 3. Form Sửa
+    // Form Sửa
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String edit(@PathVariable Long id, Model model) {
@@ -47,7 +48,7 @@ public class FAQAdminController {
         return "admin/faq/form";
     }
 
-    // 4. Lưu (Create/Update)
+    // Lưu (Create/Update)
     @PostMapping("/save")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String save(@ModelAttribute FAQJpaEntity faq) {
@@ -55,7 +56,7 @@ public class FAQAdminController {
         return "redirect:/admin/faq";
     }
 
-    // 5. Xóa
+    // Xóa
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String delete(@PathVariable Long id) {

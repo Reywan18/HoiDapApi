@@ -19,12 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/admin/accounts")
 @Tag(name = "Admin - Quản lý tài khoản")
 public class AdminAccountController {
+    // dependencies
     private final AdminServiceImpl adminService;
 
     public AdminAccountController(AdminServiceImpl adminService) {
         this.adminService = adminService;
     }
 
+    // Tạo tk Sinh Viên
     @PostMapping("/student")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Tạo tài khoản Sinh viên", description = "Chỉ cần nhập Email. Hệ thống tự sinh Password.")
@@ -36,6 +38,7 @@ public class AdminAccountController {
                 .build());
     }
 
+    // Tạo tk CVHT
     @PostMapping("/advisor")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Tạo tài khoản CVHT")

@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-HoidapdemoApplication<hoidapdemo>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.hoidap.hoidapdemo.HoidapdemoApplication",
+            "projectName": "hoidapdemo",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

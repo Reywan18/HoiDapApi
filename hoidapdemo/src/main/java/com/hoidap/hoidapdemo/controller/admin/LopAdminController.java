@@ -20,6 +20,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin/lop")
 public class LopAdminController {
+    // ... dependencies ...
     private final LopServicePort lopService;
     private final CVHTJpaRepository cvhtRepo;
     public LopAdminController(LopServicePort lopService, CVHTJpaRepository cvhtRepo) {
@@ -27,12 +28,14 @@ public class LopAdminController {
         this.cvhtRepo = cvhtRepo;
     }
 
+    //Hiển thị danh sách lớp
     @GetMapping
     public String listLop(Model model) {
         model.addAttribute("lops", lopService.getAllLop());
         return "admin/lop/list";
     }
 
+    //Tạo lớp
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("lopRequest", new CreateLopRequest());
@@ -41,12 +44,14 @@ public class LopAdminController {
         return "admin/lop/form";
     }
 
+    //Lưu lớp
     @PostMapping("/save")
     public String saveLop(@ModelAttribute CreateLopRequest request) {
         lopService.createLop(request);
         return "redirect:/admin/lop";
     }
 
+    //Sửa lớp
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable String id, Model model) {
         LopJpaEntity lop = lopService.getLopById(id);
@@ -72,6 +77,7 @@ public class LopAdminController {
         return "redirect:/admin/lop";
     }
 
+    //Xóa lớp
     @GetMapping("/delete/{id}")
     public String deleteLop(@PathVariable String id) {
         lopService.deleteLop(id);
