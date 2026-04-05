@@ -3,6 +3,7 @@ package com.hoidap.hoidapdemo.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -12,9 +13,11 @@ import java.security.Key;
 
 @Component
 public class JwtUtils {
-    private static final String JWT_SECRET = "rAgzHyLsdnzkWnajRDtbRXJx3w75tWjtqgNZTQ2sjPY";
+    @Value("${app.jwt.secret}")
+    private String jwtSecret;
 
-    private static final long JWT_EXPIRATION_MS = 8640000;
+    @Value("${app.jwt.expire-minutes}")
+    private int jwtExpireMinutes;
 
     public String generateJwtToken(Authentication authentication, String maDinhDanh, String hoTen, String role) {
         UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
@@ -25,13 +28,13 @@ public class JwtUtils {
                 .claim("hoTen", hoTen)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + JWT_EXPIRATION_MS))
+                .setExpiration(new Date((new Date()).getTime() + (long) jwtExpireMinutes * 60 * 1000))
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
     private Key key() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(JWT_SECRET));
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
     public String getUserNameFromJwtToken(String token) {
