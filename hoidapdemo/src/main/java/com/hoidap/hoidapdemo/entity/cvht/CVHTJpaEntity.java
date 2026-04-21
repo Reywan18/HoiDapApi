@@ -35,6 +35,7 @@ public class CVHTJpaEntity {
     @Column(name = "role")
     private String role;
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(mappedBy = "cvht", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<LopJpaEntity> cacLopPhuTrach;

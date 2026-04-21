@@ -27,8 +27,10 @@ public class LopJpaEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ma_cvht", referencedColumnName = "ma_cv")
     @ToString.Exclude
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private CVHTJpaEntity cvht;
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(mappedBy = "lop")
     @ToString.Exclude
     private List<SinhVienJpaEntity> sinhViens;

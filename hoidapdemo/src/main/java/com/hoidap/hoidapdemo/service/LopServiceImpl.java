@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 @Service
 public class LopServiceImpl implements LopServicePort {
     private final LopJpaRepository lopRepo;
@@ -18,7 +21,7 @@ public class LopServiceImpl implements LopServicePort {
 
     public LopServiceImpl(LopJpaRepository lopRepo, CVHTJpaRepository cvhtRepo) {
         this.lopRepo = lopRepo;
-        this.cvhtRepo= cvhtRepo;
+        this.cvhtRepo = cvhtRepo;
     }
 
     @Override
@@ -45,6 +48,14 @@ public class LopServiceImpl implements LopServicePort {
     @Override
     public List<LopJpaEntity> getAllLop() {
         return lopRepo.findAll();
+    }
+
+    @Override
+    public Page<LopJpaEntity> getAllLop(String keyword, Pageable pageable) {
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            return lopRepo.searchLop(keyword.trim(), pageable);
+        }
+        return lopRepo.findAll(pageable);
     }
 
     @Override

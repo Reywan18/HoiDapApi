@@ -31,4 +31,10 @@ public interface ConversationJpaRepository
 
     @Query("SELECT c.sinhVien.lop.maLop, c.sinhVien.lop.chuyenNganh, COUNT(c) FROM ConversationJpaEntity c GROUP BY c.sinhVien.lop.maLop, c.sinhVien.lop.chuyenNganh")
     List<Object[]> countQuestionsByClass();
+
+    @Query("SELECT c FROM ConversationJpaEntity c WHERE " +
+           "LOWER(c.tieuDe) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+           "LOWER(c.sinhVien.hoTen) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+           "LOWER(c.cvht.hoTen) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    Page<ConversationJpaEntity> searchAllConversations(@org.springframework.data.repository.query.Param("keyword") String keyword, Pageable pageable);
 }

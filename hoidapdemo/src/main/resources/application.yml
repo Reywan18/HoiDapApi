@@ -5,6 +5,11 @@ server:
     include-binding-errors: always
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
   datasource:
     url: jdbc:${DATABASE_ENGINE:mysql}://${DATABASE_HOST:localhost}:${DATABASE_PORT:3306}/${DATABASE_NAME:hoidap}
     username: ${DATABASE_USERNAME:root}
@@ -29,7 +34,16 @@ spring:
     level:
       org.springframework.web: DEBUG
 
+  ai:
+    vectorstore:
+      chroma:
+        initialize-schema: true
+
 app:
+  gemini:
+    api-key: ${GOOGLE_AI_API_KEY:AIzaSyDO7m_uto84RISZfhzfV5-zZfcR6CL-AJE}
+    url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=
+
   jwt:
     secret: ${JWT_SECRET:rAgzHyLsdnzkWnajRDtbRXJx3w75tWjtqgNZTQ2sjPY}
     expire-minutes: ${JWT_ACCESS_TOKEN_EXPIRE_MINUTES:30}

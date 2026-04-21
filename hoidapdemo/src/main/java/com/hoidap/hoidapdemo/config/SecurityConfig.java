@@ -66,11 +66,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 // --- PHÂN QUYỀN TRUY CẬP (AUTHORIZATION) ---
                 .authorizeHttpRequests(auth -> auth
-                        // Tài liệu API (Swagger) và tài nguyên tĩnh (css, js)
+                        // Tài liệu API (Swagger)
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/img/**", "/vendor/**").permitAll()
                         // Dành riêng cho ADMIN
-                        .requestMatchers("/admin/**").hasAnyAuthority("ADMIN", "ROLE_ADMIN")
+                        .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN", "ROLE_ADMIN")
                         .requestMatchers("/api/reports/**").hasAnyAuthority("ADMIN", "ROLE_ADMIN")
                         // API Chung
                         .requestMatchers("/api/auth/register", "/api/auth/login", "/api/setup/**", "/api/classes/**")
@@ -86,14 +85,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/questions/**").hasRole("SINH_VIEN")
                         .requestMatchers("/api/questions/**").hasAnyRole("SINH_VIEN", "CVHT", "ADMIN")
 
-                        .anyRequest().authenticated())
-                // Form login cho trang Admin
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/admin/dashboard", true)
-                        .permitAll())
-                .logout(logout -> logout.permitAll());
+                        .anyRequest().authenticated());
 
         // Thêm bộ lọc JWT vào trước bộ lọc xác thực username/password mặc định
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

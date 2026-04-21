@@ -24,16 +24,15 @@ public class ReportServiceImpl {
         long answered = conversationRepo.countByTrangThai(ConversationStatus.RESOLVED);
         double rate = total == 0 ? 0 : ((double) answered / total) * 100;
 
-        // // Lấy Top 5 sinh viên
-        // List<Object[]> topStudentsRaw =
-        // conversationRepo.findTopStudents(PageRequest.of(0, 5));
-        // List<StudentStat> topStudents = topStudentsRaw.stream().map(obj ->
-        // StudentStat.builder()
-        // .name((String) obj[0])
-        // .maSv((String) obj[1])
-        // .questionCount((Long) obj[2])
-        // .build()
-        // ).toList();
+        // Lấy Top 5 sinh viên
+        List<Object[]> topStudentsRaw = conversationRepo.findTopStudents(org.springframework.data.domain.PageRequest.of(0, 5));
+        List<com.hoidap.hoidapdemo.dto.report.StudentStat> topStudents = topStudentsRaw.stream().map(obj ->
+            com.hoidap.hoidapdemo.dto.report.StudentStat.builder()
+                .name((String) obj[0])
+                .maSv((String) obj[1])
+                .questionCount((Long) obj[2])
+                .build()
+        ).toList();
 
         // Lấy hiệu suất CVHT
         List<Object[]> advisorRaw = conversationRepo.findAdvisorPerformance();
@@ -59,7 +58,7 @@ public class ReportServiceImpl {
                 .totalQuestions(total)
                 .totalAnswered(answered)
                 .resolutionRate(Math.round(rate * 100.0) / 100.0)
-                // .topStudents(topStudents)
+                .topStudents(topStudents)
                 .advisorStats(advisorStats)
                 .classStats(classStats)
                 .build();

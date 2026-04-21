@@ -31,7 +31,8 @@ public class PdfReportGenerator {
             document.add(new Paragraph("Ty le: " + stats.getResolutionRate() + "%"));
             document.add(Chunk.NEWLINE);
 
-            document.add(new Paragraph("Top Sinh Vien Hoi Nhieu Nhat:", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
+            document.add(
+                    new Paragraph("Top Sinh Vien Hoi Nhieu Nhat:", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
             document.add(Chunk.NEWLINE);
 
             PdfPTable table = new PdfPTable(3);
@@ -43,10 +44,12 @@ public class PdfReportGenerator {
                 table.addCell(header);
             });
 
-            for (StudentStat sv : stats.getTopStudents()) {
-                table.addCell(sv.getMaSv());
-                table.addCell(sv.getName());
-                table.addCell(sv.getQuestionCount().toString());
+            if (stats.getTopStudents() != null) {
+                for (StudentStat sv : stats.getTopStudents()) {
+                    table.addCell(sv.getMaSv() != null ? sv.getMaSv() : "-");
+                    table.addCell(sv.getName() != null ? sv.getName() : "N/A");
+                    table.addCell(sv.getQuestionCount() != null ? sv.getQuestionCount().toString() : "0");
+                }
             }
             document.add(table);
 

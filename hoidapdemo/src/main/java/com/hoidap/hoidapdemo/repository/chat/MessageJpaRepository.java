@@ -11,4 +11,6 @@ public interface MessageJpaRepository extends JpaRepository<MessageJpaEntity, Lo
     
     // Lấy toàn bộ lịch sử tin nhắn trong 1 phòng chat, xếp theo thời gian gửi (cũ nhất -> mới nhất)
     List<MessageJpaEntity> findByConversation_IdOrderByThoiGianGuiAsc(Long conversationId);
+
+    void deleteByConversation_Id(Long conversationId);
 }

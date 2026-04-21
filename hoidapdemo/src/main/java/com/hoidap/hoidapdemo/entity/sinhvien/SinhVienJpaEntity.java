@@ -24,6 +24,7 @@ public class SinhVienJpaEntity {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @Column(name = "password", nullable = false, length = 100)
     private String password;
 
@@ -33,5 +34,6 @@ public class SinhVienJpaEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ma_lop", referencedColumnName = "ma_lop")
     @ToString.Exclude
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties({ "hibernateLazyInitializer", "handler", "sinhViens" })
     private LopJpaEntity lop;
 }
