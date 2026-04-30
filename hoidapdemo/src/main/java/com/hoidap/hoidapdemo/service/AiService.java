@@ -88,6 +88,11 @@ public class AiService {
             // thẳng vào ChromaDB
             vectorStore.add(batch);
         }
+        
+        // Cập nhật lưu trữ xuống file nếu dùng SimpleVectorStore
+        if (vectorStore instanceof org.springframework.ai.vectorstore.SimpleVectorStore) {
+            ((org.springframework.ai.vectorstore.SimpleVectorStore) vectorStore).save(new java.io.File("hoidap_vector_store.json"));
+        }
     }
 
     // --- Hỗ trợ việc kiểm tra DB (Xem VectorStore đã học mót được gì chưa) ---

@@ -113,6 +113,8 @@ public class UserServiceImpl implements UserServicePort {
                 userDetails.getRole());
     }
 
+    @Override
+    @Transactional
     public UserProfileResponse getMyProfile(String email) {
         var svOpt = sinhVienRepo.findByEmail(email);
         if (svOpt.isPresent()) {
@@ -151,12 +153,20 @@ public class UserServiceImpl implements UserServicePort {
         var cvhtOpt = cvhtRepo.findByEmail(email);
         if (cvhtOpt.isPresent()) {
             CVHTJpaEntity cv = cvhtOpt.get();
+            
+            // Lấy danh sách lớp trực tiếp từ Repo để tránh lỗi Lazy Loading hoặc Mapping
+            List<LopJpaEntity> classes = lopRepo.findByCvhtId(cv.getMaCv());
+            List<String> managedClassList = classes.stream()
+                    .map(LopJpaEntity::getMaLop)
+                    .toList();
+
             return UserProfileResponse.builder()
                     .maDinhDanh(cv.getMaCv())
                     .hoTen(cv.getHoTen())
                     .email(cv.getEmail())
                     .soDienThoai(cv.getSoDienThoai())
                     .role("CVHT")
+                    .managedClasses(managedClassList)
                     .build();
         }
         throw new IllegalArgumentException("Không tìm thấy thông tin người dùng: " + email);
@@ -290,6 +300,17 @@ public class UserServiceImpl implements UserServicePort {
     public void saveSinhVien(SinhVienJpaEntity sv) {
         if (sinhVienRepo.existsById(sv.getMaSv())) {
             SinhVienJpaEntity oldSV = getSinhVienById(sv.getMaSv());
+            // Giu lai cac truong khong duoc gui len tu frontend
+            if (sv.getEmail() == null || sv.getEmail().isEmpty()) {
+                sv.setEmail(oldSV.getEmail());
+            }
+            if (sv.getRole() == null || sv.getRole().isEmpty()) {
+                sv.setRole(oldSV.getRole());
+            }
+            if (sv.getHoTen() == null || sv.getHoTen().isEmpty()) {
+                sv.setHoTen(oldSV.getHoTen());
+            }
+            // Xu ly password
             if (sv.getPassword() == null || sv.getPassword().isEmpty()) {
                 sv.setPassword(oldSV.getPassword());
             } else {
@@ -331,6 +352,20 @@ public class UserServiceImpl implements UserServicePort {
     public void saveCVHT(CVHTJpaEntity cv) {
         if (cvhtRepo.existsById(cv.getMaCv())) {
             CVHTJpaEntity oldCV = getCVHTById(cv.getMaCv());
+            // Giu lai cac truong khong duoc gui len tu frontend
+            if (cv.getEmail() == null || cv.getEmail().isEmpty()) {
+                cv.setEmail(oldCV.getEmail());
+            }
+            if (cv.getRole() == null || cv.getRole().isEmpty()) {
+                cv.setRole(oldCV.getRole());
+            }
+            if (cv.getHoTen() == null || cv.getHoTen().isEmpty()) {
+                cv.setHoTen(oldCV.getHoTen());
+            }
+            if (cv.getSoDienThoai() == null) {
+                cv.setSoDienThoai(oldCV.getSoDienThoai());
+            }
+            // Xu ly password
             if (cv.getPassword() == null || cv.getPassword().isEmpty()) {
                 cv.setPassword(oldCV.getPassword());
             } else {

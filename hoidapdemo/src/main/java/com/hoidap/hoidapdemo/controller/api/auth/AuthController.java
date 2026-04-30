@@ -1,15 +1,12 @@
 package com.hoidap.hoidapdemo.controller.api.auth;
 
 import com.hoidap.hoidapdemo.service.port.UserServicePort;
-import com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity;
-import com.hoidap.hoidapdemo.repository.sinhvien.SinhVienJpaRepository;
-import com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity;
-import com.hoidap.hoidapdemo.repository.cvht.CVHTJpaRepository;
 import java.util.Optional;
 import com.hoidap.hoidapdemo.dto.auth.AuthResponse;
 import com.hoidap.hoidapdemo.dto.auth.LoginRequest;
 import com.hoidap.hoidapdemo.dto.common.ApiResponse;
 import com.hoidap.hoidapdemo.dto.user.ProfileUpdateRequest;
+import com.hoidap.hoidapdemo.dto.user.UserProfileResponse;
 import org.springframework.http.ResponseEntity;
 import com.hoidap.hoidapdemo.utils.AppStatus;
 import org.springframework.security.core.Authentication;
@@ -20,7 +17,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.HashMap;
-import java.util.Map;
 
 
 @RestController
@@ -29,13 +25,9 @@ import java.util.Map;
 public class AuthController {
     // dependencies
     private final UserServicePort userService;
-    private final SinhVienJpaRepository sinhVienRepo;
-    private final CVHTJpaRepository cvhtRepo;
 
-    public AuthController(UserServicePort userService, SinhVienJpaRepository sinhVienRepo, CVHTJpaRepository cvhtRepo) {
+    public AuthController(UserServicePort userService) {
         this.userService = userService;
-        this.sinhVienRepo = sinhVienRepo;
-        this.cvhtRepo = cvhtRepo;
     }
 
 //    @PostMapping("/register")
@@ -121,50 +113,22 @@ public class AuthController {
      * Bao gồm cả thông tin Cố vấn học tập (CVHT) của sinh viên đó để hiển thị.
      */
     @GetMapping("/profile")
-    public ResponseEntity<ApiResponse<Map<String, Object>>> getProfile() {
+    public ResponseEntity<ApiResponse<UserProfileResponse>> getProfile() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentEmail = auth.getName();
 
-        Map<String, Object> data = new HashMap<>();
-
-        Optional<SinhVienJpaEntity> svOpt = sinhVienRepo.findByEmail(currentEmail);
-        
-        if (svOpt.isPresent()) {
-            SinhVienJpaEntity sv = svOpt.get();
-            data.put("maSv", sv.getMaSv());
-            data.put("maDinhDanh", sv.getMaSv());
-            data.put("hoTen", sv.getHoTen());
-            data.put("email", sv.getEmail());
-            data.put("soDienThoai", sv.getSoDienThoai());
-            data.put("role", "SINH_VIEN");
-
-            if (sv.getLop() != null) {
-                data.put("maLop", sv.getLop().getMaLop());
-                data.put("chuyenMon", sv.getLop().getChuyenNganh());
-                if (sv.getLop().getCvht() != null) {
-                    data.put("cvhtMa", sv.getLop().getCvht().getMaCv());
-                    data.put("cvhtHoTen", sv.getLop().getCvht().getHoTen());
-                }
-            }
-        } else {
-            Optional<CVHTJpaEntity> cvhtOpt = cvhtRepo.findByEmail(currentEmail);
-            if (cvhtOpt.isPresent()) {
-                CVHTJpaEntity cvht = cvhtOpt.get();
-                data.put("maCv", cvht.getMaCv());
-                data.put("maDinhDanh", cvht.getMaCv());
-                data.put("hoTen", cvht.getHoTen());
-                data.put("email", cvht.getEmail());
-                data.put("soDienThoai", cvht.getSoDienThoai());
-                data.put("role", "CVHT");
-            } else {
-                throw new RuntimeException("Không tìm thấy account cho email: " + currentEmail);
-            }
+        try {
+            UserProfileResponse profile = userService.getMyProfile(currentEmail);
+            return ResponseEntity.ok(ApiResponse.<UserProfileResponse>builder()
+                    .status(AppStatus.SUCCESS.getCode())
+                    .message("Lấy thông tin thành công")
+                    .data(profile)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body(ApiResponse.<UserProfileResponse>builder()
+                    .status(404)
+                    .message(e.getMessage())
+                    .build());
         }
-
-        return ResponseEntity.ok(ApiResponse.<Map<String, Object>>builder()
-                .status(AppStatus.SUCCESS.getCode())
-                .message("Lấy thông tin thành công")
-                .data(data)
-                .build());
     }
 }

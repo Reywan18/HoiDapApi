@@ -9,4 +9,6 @@ public  class AdvisorStat {
     private String name;
     private Double avgResponseTimeHours;
     private Long answeredCount;
+    private Long totalQuestions;
+    private Double efficiencyPercentage;
 }

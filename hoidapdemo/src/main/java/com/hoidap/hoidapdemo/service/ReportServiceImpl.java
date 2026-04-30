@@ -37,13 +37,21 @@ public class ReportServiceImpl {
         // Lấy hiệu suất CVHT
         List<Object[]> advisorRaw = conversationRepo.findAdvisorPerformance();
         List<AdvisorStat> advisorStats = advisorRaw.stream().map(obj -> {
-            Double avgTime = 0.0;
-            if (obj[1] != null) {
-                avgTime = ((Number) obj[1]).doubleValue();
-            }
+            Double avgTime = obj[1] != null ? ((Number) obj[1]).doubleValue() : 0.0;
+            Long advAnswered = obj[2] != null ? ((Number) obj[2]).longValue() : 0L;
+            Long advTotal = obj[3] != null ? ((Number) obj[3]).longValue() : 0L;
+            
+            // Công thức tính hiệu suất (%): (Đã xử lý / Tổng được phân công) * 100
+            // Nếu thời gian phản hồi quá chậm (> 48h), trừ thêm điểm hiệu suất (ví dụ: -10%)
+            double efficiency = advTotal == 0 ? 0.0 : ((double) advAnswered / advTotal) * 100;
+            if (avgTime > 48 && efficiency > 10) efficiency -= 10;
+            
             return AdvisorStat.builder()
                     .name((String) obj[0])
                     .avgResponseTimeHours(avgTime)
+                    .answeredCount(advAnswered)
+                    .totalQuestions(advTotal)
+                    .efficiencyPercentage(Math.round(efficiency * 10.0) / 10.0)
                     .build();
         }).toList();
 
