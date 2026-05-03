@@ -4,8 +4,6 @@ stages:
 
 variables:
   DOCKER_DRIVER: overlay2
-  # Đặt biến IMAGE_TAG dựa trên tên tag của Git (nếu không có tag thì mặc định là 'latest')
-  IMAGE_TAG: $CI_REGISTRY_IMAGE:${CI_COMMIT_TAG:-latest}
 
 .docker_setup:
   image: docker:24.0.5
@@ -19,8 +17,9 @@ build-backend:
   extends: .docker_setup
   script:
     - cd hoidapdemo
-    - docker build -t $IMAGE_TAG -t $CI_REGISTRY_IMAGE:latest .
-    - docker push $IMAGE_TAG
+    - export TAG=${CI_COMMIT_TAG:-latest}
+    - docker build -t $CI_REGISTRY_IMAGE:$TAG -t $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:$TAG
     - docker push $CI_REGISTRY_IMAGE:latest
   only:
     - tags
