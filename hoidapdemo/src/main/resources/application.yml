@@ -37,6 +37,9 @@ spring:
   ai:
     vectorstore:
       chroma:
+        client:
+          host: ${CHROMA_HOST:http://localhost}
+          port: ${CHROMA_PORT:8000}
         initialize-schema: true
 
 app:
