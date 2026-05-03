@@ -17,9 +17,9 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Run stage
-# Sử dụng JRE (Java Runtime Environment) trên nền Alpine Linux.
-# Alpine giúp giảm kích thước image từ >500MB xuống còn khoảng ~150MB.
-FROM eclipse-temurin:17-jre-alpine
+# Sử dụng JRE (Java Runtime Environment) bản Jammy (Ubuntu) thay vì Alpine.
+# Spring AI / HuggingFace Tokenizer cần thư viện C++ (glibc) để chạy, bản Alpine (musl libc) không hỗ trợ.
+FROM eclipse-temurin:17-jre-jammy
 
 # Thiết lập thư mục làm việc 
 WORKDIR /app
