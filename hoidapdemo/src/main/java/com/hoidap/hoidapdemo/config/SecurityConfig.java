@@ -103,8 +103,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Cho phép Frontend React chạy ở localhost:3000 và 5173
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        // Cho phép Frontend React chạy ở localhost:5173 và địa chỉ IP Public của AWS
+        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://3.27.93.135"));
 
         // Cho phép tất cả các phương thức (GET, POST, PUT, DELETE...)
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
