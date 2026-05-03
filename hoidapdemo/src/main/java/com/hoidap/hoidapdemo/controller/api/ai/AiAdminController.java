@@ -1,6 +1,6 @@
 package com.hoidap.hoidapdemo.controller.api.ai;
 
-import com.hoidap.hoidapdemo.service.AiService;
+import com.hoidap.hoidapdemo.service.port.AiServicePort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,9 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/admin/ai")
 public class AiAdminController {
 
-    private final AiService aiService;
+    private final AiServicePort aiService;
 
-    public AiAdminController(AiService aiService) {
+    public AiAdminController(AiServicePort aiService) {
         this.aiService = aiService;
     }
 

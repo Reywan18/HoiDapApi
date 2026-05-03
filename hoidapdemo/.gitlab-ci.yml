@@ -1,0 +1,46 @@
+stages:
+  - package
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+  # Đặt biến IMAGE_TAG dựa trên tên tag của Git (nếu không có tag thì mặc định là 'latest')
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:${CI_COMMIT_TAG:-latest}
+
+.docker_setup:
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+build-backend:
+  stage: package
+  extends: .docker_setup
+  script:
+    - docker build -t $IMAGE_TAG -t $CI_REGISTRY_IMAGE:latest .
+    - docker push $IMAGE_TAG
+    - docker push $CI_REGISTRY_IMAGE:latest
+  only:
+    - tags
+    - main
+
+deploy-backend:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache openssh-client
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
+  script:
+    - ssh $SERVER_USER@$SERVER_IP "
+        cd ~/app &&
+        docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY &&
+        docker compose pull backend &&
+        docker compose up -d backend &&
+        docker image prune -f"
+  only:
+    - tags
+    - main

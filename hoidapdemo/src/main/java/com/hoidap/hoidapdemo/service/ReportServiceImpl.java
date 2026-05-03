@@ -7,12 +7,13 @@ import com.hoidap.hoidapdemo.dto.report.ClassStat;
 import com.hoidap.hoidapdemo.dto.report.DashboardStats;
 // import com.hoidap.hoidapdemo.dto.report.StudentStat;
 // import org.springframework.data.domain.PageRequest;
+import com.hoidap.hoidapdemo.service.port.ReportServicePort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ReportServiceImpl {
+public class ReportServiceImpl implements ReportServicePort {
     private final ConversationJpaRepository conversationRepo;
 
     public ReportServiceImpl(ConversationJpaRepository conversationRepo) {

@@ -1,6 +1,6 @@
 package com.hoidap.hoidapdemo.controller.api.ai;
 
-import com.hoidap.hoidapdemo.service.AiService;
+import com.hoidap.hoidapdemo.service.port.AiServicePort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/ai/chat")
 public class AiChatController {
 
-    private final AiService aiService;
+    private final AiServicePort aiService;
 
-    public AiChatController(AiService aiService) {
+    public AiChatController(AiServicePort aiService) {
         this.aiService = aiService;
     }
 

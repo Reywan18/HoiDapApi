@@ -16,6 +16,7 @@ import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.core.io.ByteArrayResource;
+import com.hoidap.hoidapdemo.service.port.AiServicePort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +24,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
-public class AiService {
+public class AiServiceImpl implements AiServicePort {
 
     private final VectorStore vectorStore;
 
@@ -33,7 +34,7 @@ public class AiService {
     @Value("${app.gemini.url}")
     private String geminiApiUrl;
 
-    public AiService(VectorStore vectorStore) {
+    public AiServiceImpl(VectorStore vectorStore) {
         this.vectorStore = vectorStore;
     }
 

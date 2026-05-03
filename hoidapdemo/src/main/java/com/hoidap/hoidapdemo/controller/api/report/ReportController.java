@@ -1,6 +1,6 @@
 package com.hoidap.hoidapdemo.controller.api.report;
 
-import com.hoidap.hoidapdemo.service.ReportServiceImpl;
+import com.hoidap.hoidapdemo.service.port.ReportServicePort;
 import com.hoidap.hoidapdemo.utils.pdf.PdfReportGenerator;
 import com.hoidap.hoidapdemo.dto.common.ApiResponse;
 import com.hoidap.hoidapdemo.dto.report.DashboardStats;
@@ -17,9 +17,9 @@ import java.io.ByteArrayInputStream;
 @RestController
 @RequestMapping("/api/reports")
 public class ReportController {
-    private final ReportServiceImpl reportService;
+    private final ReportServicePort reportService;
 
-    public ReportController(ReportServiceImpl reportService) {
+    public ReportController(ReportServicePort reportService) {
         this.reportService = reportService;
     }
 

@@ -5,6 +5,7 @@ import com.hoidap.hoidapdemo.repository.cvht.CVHTJpaRepository;
 import com.hoidap.hoidapdemo.repository.sinhvien.SinhVienJpaRepository;
 import com.hoidap.hoidapdemo.dto.auth.AccountCreatedResponse;
 import com.hoidap.hoidapdemo.dto.auth.CreateUserRequest;
+import com.hoidap.hoidapdemo.service.port.AdminServicePort;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class AdminServiceImpl {
+public class AdminServiceImpl implements AdminServicePort {
     private final SinhVienJpaRepository sinhVienRepo;
     private final CVHTJpaRepository cvhtRepo;
     private final PasswordEncoder passwordEncoder;
