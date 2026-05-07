@@ -18,6 +18,9 @@ public interface ConversationJpaRepository
     // Tìm các cuộc hội thoại của 1 sinh viên cấp cụ thể (Loại trừ Bot)
     Page<ConversationJpaEntity> findBySinhVien_MaSvAndTrangThaiNot(String maSv, ConversationStatus trangThai, Pageable pageable);
 
+    // Tìm các cuộc hội thoại của 1 sinh viên có chứa keyword trong tiêu đề
+    Page<ConversationJpaEntity> findBySinhVien_MaSvAndTrangThaiNotAndTieuDeContainingIgnoreCase(String maSv, ConversationStatus trangThai, String keyword, Pageable pageable);
+
     // Tìm các cuộc hội thoại đang được một CVHT cụ thể đảm nhận (Loại trừ Bot)
     Page<ConversationJpaEntity> findByCvht_MaCvAndTrangThaiNot(String maCv, ConversationStatus trangThai, Pageable pageable);
 

@@ -70,11 +70,18 @@ public class AuthController {
 
             return ResponseEntity.ok(response);
 
+        } catch (org.springframework.security.authentication.BadCredentialsException e) {
+            return ResponseEntity.status(401).body(
+                    AuthResponse.builder()
+                            .status(401)
+                            .message("Tài khoản hoặc mật khẩu không chính xác.")
+                            .build()
+            );
         } catch (Exception e) {
             return ResponseEntity.status(401).body(
                     AuthResponse.builder()
                             .status(401)
-                            .message("Đăng nhập thất bại: " + e.getMessage())
+                            .message("Đăng nhập thất bại: Lỗi hệ thống.")
                             .build()
             );
         }
@@ -99,6 +106,32 @@ public class AuthController {
             return ResponseEntity.badRequest().body(AuthResponse.builder()
                     .status(AppStatus.MISSING_VALUE.getCode())
                     .message(AppStatus.MISSING_VALUE.getMessage() + " " + e.getMessage())
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(AuthResponse.builder()
+                    .status(AppStatus.INTERNAL_ERROR.getCode())
+                    .message(AppStatus.INTERNAL_ERROR.getMessage())
+                    .build());
+        }
+    }
+
+    /**
+     * API Đổi mật khẩu
+     */
+    @PostMapping("/password/change")
+    @Operation(summary = "Đổi mật khẩu")
+    public ResponseEntity<AuthResponse> changePassword(@Valid @RequestBody com.hoidap.hoidapdemo.dto.auth.ChangePasswordRequest request, Authentication authentication) {
+        String email = authentication.getName();
+        try {
+            userService.changePassword(email, request.getCurrentPassword(), request.getNewPassword());
+            return ResponseEntity.ok(AuthResponse.builder()
+                    .status(AppStatus.SUCCESS.getCode())
+                    .message("Đổi mật khẩu thành công")
+                    .build());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(AuthResponse.builder()
+                    .status(AppStatus.MISSING_VALUE.getCode())
+                    .message(e.getMessage())
                     .build());
         } catch (Exception e) {
             return ResponseEntity.status(500).body(AuthResponse.builder()

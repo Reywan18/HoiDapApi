@@ -32,13 +32,16 @@ public class ConversationController {
     private final ConversationJpaRepository conversationRepo;
     private final MessageJpaRepository messageRepo;
     private final SinhVienJpaRepository sinhVienRepo;
+    private final org.springframework.messaging.simp.SimpMessagingTemplate messagingTemplate;
 
     public ConversationController(ConversationJpaRepository conversationRepo,
             MessageJpaRepository messageRepo,
-            SinhVienJpaRepository sinhVienRepo) {
+            SinhVienJpaRepository sinhVienRepo,
+            org.springframework.messaging.simp.SimpMessagingTemplate messagingTemplate) {
         this.conversationRepo = conversationRepo;
         this.messageRepo = messageRepo;
         this.sinhVienRepo = sinhVienRepo;
+        this.messagingTemplate = messagingTemplate;
     }
 
     // 1. Lấy danh sách phòng chat của 1 sinh viên
@@ -46,11 +49,19 @@ public class ConversationController {
     public ResponseEntity<ApiResponse<Page<ConversationResponseDto>>> getStudentConversations(
             @PathVariable String maSv,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<ConversationResponseDto> responsePage = conversationRepo
-                .findBySinhVien_MaSvAndTrangThaiNot(maSv, ConversationStatus.CHATTING_WITH_BOT,
-                        PageRequest.of(page, size))
-                .map(this::mapToDto);
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false, defaultValue = "") String keyword) {
+        
+        Page<ConversationResponseDto> responsePage;
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            responsePage = conversationRepo
+                    .findBySinhVien_MaSvAndTrangThaiNotAndTieuDeContainingIgnoreCase(maSv, ConversationStatus.CHATTING_WITH_BOT, keyword.trim(), PageRequest.of(page, size))
+                    .map(this::mapToDto);
+        } else {
+            responsePage = conversationRepo
+                    .findBySinhVien_MaSvAndTrangThaiNot(maSv, ConversationStatus.CHATTING_WITH_BOT, PageRequest.of(page, size))
+                    .map(this::mapToDto);
+        }
 
         return ResponseEntity.ok(ApiResponse.<Page<ConversationResponseDto>>builder()
                 .status(AppStatus.SUCCESS.getCode())
@@ -160,6 +171,70 @@ public class ConversationController {
                 .message("Tạo phòng chat thành công")
                 .data(mapToDto(conversation))
                 .build());
+    }
+
+    @PostMapping("/{id}/upload")
+    public ResponseEntity<ApiResponse<MessageResponseDto>> uploadFile(
+            @PathVariable Long id,
+            @RequestParam("file") org.springframework.web.multipart.MultipartFile file,
+            @RequestParam("senderId") String senderId,
+            @RequestParam("senderType") String senderType,
+            @RequestParam(value = "content", required = false) String content) {
+        try {
+            ConversationJpaEntity conversation = conversationRepo.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy cuộc hội thoại"));
+
+            MessageJpaEntity messageEntity = new MessageJpaEntity();
+            messageEntity.setConversation(conversation);
+            
+            if (content != null && !content.trim().isEmpty()) {
+                messageEntity.setNoiDung(content);
+            } else {
+                messageEntity.setNoiDung("Đã đính kèm tệp: " + file.getOriginalFilename());
+            }
+            
+            messageEntity.setThoiGianGui(LocalDateTime.now());
+            messageEntity.setNguoiGuiId(senderId);
+            messageEntity.setNguoiGuiType(SenderType.valueOf(senderType));
+            messageEntity.setFileName(file.getOriginalFilename());
+            messageEntity.setFileType(file.getContentType());
+            messageEntity.setFileData(file.getBytes());
+
+            MessageJpaEntity savedMessage = messageRepo.save(messageEntity);
+            conversation.setNgayCapNhatCuoi(LocalDateTime.now());
+            conversationRepo.save(conversation);
+
+            MessageResponseDto responseDto = mapToMessageDto(savedMessage);
+            messagingTemplate.convertAndSend("/topic/conversation/" + id, responseDto);
+
+            return ResponseEntity.ok(ApiResponse.<MessageResponseDto>builder()
+                    .status(AppStatus.SUCCESS.getCode())
+                    .message("Tải lên thành công")
+                    .data(responseDto)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(ApiResponse.<MessageResponseDto>builder()
+                    .status(AppStatus.INTERNAL_ERROR.getCode())
+                    .message("Lỗi khi tải lên file: " + e.getMessage())
+                    .build());
+        }
+    }
+
+    @GetMapping("/messages/{messageId}/download")
+    public ResponseEntity<org.springframework.core.io.Resource> downloadFile(@PathVariable Long messageId) {
+        MessageJpaEntity message = messageRepo.findById(messageId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy tin nhắn"));
+
+        if (message.getFileData() == null) {
+            throw new RuntimeException("Tin nhắn không có file đính kèm");
+        }
+
+        org.springframework.core.io.ByteArrayResource resource = new org.springframework.core.io.ByteArrayResource(message.getFileData());
+
+        return ResponseEntity.ok()
+                .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + message.getFileName() + "\"")
+                .contentType(org.springframework.http.MediaType.parseMediaType(message.getFileType() != null ? message.getFileType() : "application/octet-stream"))
+                .body(resource);
     }
 
     // Hàm chuyển đổi Entity sang DTO

@@ -100,4 +100,36 @@ public class AdminServiceImpl {
                 .message("Tạo thành công. Mã CVHT: " + maCv)
                 .build();
     }
+
+    @Transactional
+    public AccountCreatedResponse resetStudentPassword(String maSv) {
+        SinhVienJpaEntity sv = sinhVienRepo.findById(maSv)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy sinh viên có mã: " + maSv));
+        
+        String rawPassword = generateRandomPassword();
+        sv.setPassword(passwordEncoder.encode(rawPassword));
+        sinhVienRepo.save(sv);
+
+        return AccountCreatedResponse.builder()
+                .email(sv.getEmail())
+                .generatedPassword(rawPassword)
+                .message("Đặt lại mật khẩu thành công!")
+                .build();
+    }
+
+    @Transactional
+    public AccountCreatedResponse resetAdvisorPassword(String maCv) {
+        CVHTJpaEntity cvht = cvhtRepo.findById(maCv)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy CVHT có mã: " + maCv));
+        
+        String rawPassword = generateRandomPassword();
+        cvht.setPassword(passwordEncoder.encode(rawPassword));
+        cvhtRepo.save(cvht);
+
+        return AccountCreatedResponse.builder()
+                .email(cvht.getEmail())
+                .generatedPassword(rawPassword)
+                .message("Đặt lại mật khẩu thành công!")
+                .build();
+    }
 }

@@ -173,6 +173,47 @@ public class UserServiceImpl implements UserServicePort {
     }
 
     @Override
+    @Transactional
+    public void changePassword(String email, String currentPassword, String newPassword) {
+        // Xác thực mật khẩu cũ bằng cách mô phỏng hành động đăng nhập
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(email, currentPassword)
+            );
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Mật khẩu hiện tại không chính xác.");
+        }
+
+        String hashedPassword = passwordEncoder.encode(newPassword);
+
+        var svOpt = sinhVienRepo.findByEmail(email);
+        if (svOpt.isPresent()) {
+            SinhVienJpaEntity sv = svOpt.get();
+            sv.setPassword(hashedPassword);
+            sinhVienRepo.save(sv);
+            return;
+        }
+
+        var cvhtOpt = cvhtRepo.findByEmail(email);
+        if (cvhtOpt.isPresent()) {
+            CVHTJpaEntity cv = cvhtOpt.get();
+            cv.setPassword(hashedPassword);
+            cvhtRepo.save(cv);
+            return;
+        }
+
+        var adminOpt = adminRepo.findByEmail(email);
+        if (adminOpt.isPresent()) {
+            AdminJpaEntity admin = adminOpt.get();
+            admin.setPassword(hashedPassword);
+            adminRepo.save(admin);
+            return;
+        }
+
+        throw new IllegalArgumentException("Không tìm thấy người dùng.");
+    }
+
+    @Override
     public UserDto getUserByEmail(String email) {
         var svOpt = sinhVienRepo.findByEmail(email);
         if (svOpt.isPresent()) {

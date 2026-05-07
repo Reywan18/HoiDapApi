@@ -41,6 +41,9 @@ public class SetupController {
         if (email == null || email.isBlank() || password == null || password.isBlank()) {
             return ResponseEntity.badRequest().body("Email va password khong duoc de trong!");
         }
+        if (!email.endsWith("@thanglong.edu.vn")) {
+            return ResponseEntity.badRequest().body("Email phai co duoi @thanglong.edu.vn");
+        }
         if (adminRepo.findByEmail(email).isPresent()) {
             return ResponseEntity.status(409).body("Admin da ton tai voi email: " + email);
         }
@@ -63,6 +66,9 @@ public class SetupController {
 
         if (email == null || email.isBlank() || password == null || password.isBlank()) {
             return ResponseEntity.badRequest().body("Email va password khong duoc de trong!");
+        }
+        if (!email.endsWith("@thanglong.edu.vn")) {
+            return ResponseEntity.badRequest().body("Email phai co duoi @thanglong.edu.vn");
         }
         if (cvhtRepo.findByEmail(email).isPresent()) {
             return ResponseEntity.status(409).body("CVHT da ton tai voi email: " + email);
@@ -93,6 +99,9 @@ public class SetupController {
 
         if (email == null || email.isBlank() || password == null || password.isBlank()) {
             return ResponseEntity.badRequest().body("Email va password khong duoc de trong!");
+        }
+        if (!email.endsWith("@thanglong.edu.vn")) {
+            return ResponseEntity.badRequest().body("Email phai co duoi @thanglong.edu.vn");
         }
         if (sinhVienRepo.findByEmail(email).isPresent()) {
             return ResponseEntity.status(409).body("Sinh vien da ton tai voi email: " + email);
