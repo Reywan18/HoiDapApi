@@ -89,14 +89,9 @@ public class AiServiceImpl implements AiServicePort {
             // thẳng vào ChromaDB
             vectorStore.add(batch);
         }
-        
-        // Cập nhật lưu trữ xuống file nếu dùng SimpleVectorStore
-        if (vectorStore instanceof org.springframework.ai.vectorstore.SimpleVectorStore) {
-            ((org.springframework.ai.vectorstore.SimpleVectorStore) vectorStore).save(new java.io.File("hoidap_vector_store.json"));
-        }
     }
 
-    // --- Hỗ trợ việc kiểm tra DB (Xem VectorStore đã học mót được gì chưa) ---
+    // --- Hỗ trợ việc kiểm tra DB (Xem VectorStore đã học được gì chưa) ---
     public String testSearchDb(String question) {
         // Tìm 2 đoạn văn bản (chunks) giống nhất với câu hỏi chứa trong DB
         List<Document> results = vectorStore.similaritySearch(

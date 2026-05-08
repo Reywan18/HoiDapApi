@@ -58,7 +58,7 @@ public class AdminUserApiController {
 
     // --- CVHT ---
     @GetMapping("/cvht")
-    public ResponseEntity<ApiResponse<org.springframework.data.domain.Page<CVHTJpaEntity>>> getAllAdvisors(
+    public ResponseEntity<ApiResponse<org.springframework.data.domain.Page<CVHTJpaEntity>>> getAllCVHTs(
             @RequestParam(required = false) String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -72,7 +72,7 @@ public class AdminUserApiController {
     }
 
     @PutMapping("/cvht/{id}")
-    public ResponseEntity<ApiResponse<String>> updateAdvisor(@PathVariable String id, @RequestBody CVHTJpaEntity cv) {
+    public ResponseEntity<ApiResponse<String>> updateCVHT(@PathVariable String id, @RequestBody CVHTJpaEntity cv) {
         cv.setMaCv(id); // Đảm bảo ID đúng
         userService.saveCVHT(cv);
         return ResponseEntity.ok(ApiResponse.<String>builder()
@@ -82,7 +82,7 @@ public class AdminUserApiController {
     }
 
     @DeleteMapping("/cvht/{id}")
-    public ResponseEntity<ApiResponse<String>> deleteAdvisor(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<String>> deleteCVHT(@PathVariable String id) {
         userService.deleteCVHT(id);
         return ResponseEntity.ok(ApiResponse.<String>builder()
                 .status(AppStatus.SUCCESS.getCode())

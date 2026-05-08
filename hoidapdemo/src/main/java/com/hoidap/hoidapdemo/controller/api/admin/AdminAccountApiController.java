@@ -31,8 +31,8 @@ public class AdminAccountApiController {
     }
 
     @PostMapping("/cvht")
-    public ResponseEntity<ApiResponse<AccountCreatedResponse>> createAdvisorAccount(@RequestBody CreateUserRequest request) {
-        AccountCreatedResponse response = adminService.createAdvisorAccount(request);
+    public ResponseEntity<ApiResponse<AccountCreatedResponse>> createCVHTAccount(@RequestBody CreateUserRequest request) {
+        AccountCreatedResponse response = adminService.createCVHTAccount(request);
         return ResponseEntity.ok(ApiResponse.<AccountCreatedResponse>builder()
                 .status(AppStatus.SUCCESS.getCode())
                 .message("Tạo tài khoản CVHT thành công")
@@ -51,8 +51,8 @@ public class AdminAccountApiController {
     }
 
     @PostMapping("/cvht/{id}/reset-password")
-    public ResponseEntity<ApiResponse<AccountCreatedResponse>> resetAdvisorPassword(@PathVariable String id) {
-        AccountCreatedResponse response = adminService.resetAdvisorPassword(id);
+    public ResponseEntity<ApiResponse<AccountCreatedResponse>> resetCVHTPassword(@PathVariable String id) {
+        AccountCreatedResponse response = adminService.resetCVHTPassword(id);
         return ResponseEntity.ok(ApiResponse.<AccountCreatedResponse>builder()
                 .status(AppStatus.SUCCESS.getCode())
                 .message("Đặt lại mật khẩu CVHT thành công")

@@ -40,7 +40,7 @@ public interface ConversationJpaRepository
            "FROM cvht c " +
            "LEFT JOIN conversation conv ON conv.ma_cv = c.ma_cv " +
            "GROUP BY c.ma_cv, c.ho_ten", nativeQuery = true)
-    List<Object[]> findAdvisorPerformance();
+    List<Object[]> findCVHTPerformance();
 
     @Query("SELECT c.sinhVien.lop.maLop, c.sinhVien.lop.chuyenNganh, COUNT(c) FROM ConversationJpaEntity c GROUP BY c.sinhVien.lop.maLop, c.sinhVien.lop.chuyenNganh")
     List<Object[]> countQuestionsByClass();

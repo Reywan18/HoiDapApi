@@ -68,7 +68,7 @@ public class AdminServiceImpl implements AdminServicePort {
     }
 
     @Transactional
-    public AccountCreatedResponse createAdvisorAccount(CreateUserRequest request) {
+    public AccountCreatedResponse createCVHTAccount(CreateUserRequest request) {
         String maCv = request.getMaDinhDanh().trim().toUpperCase();
         String email = request.getEmail().trim().toLowerCase();
 
@@ -119,7 +119,7 @@ public class AdminServiceImpl implements AdminServicePort {
     }
 
     @Transactional
-    public AccountCreatedResponse resetAdvisorPassword(String maCv) {
+    public AccountCreatedResponse resetCVHTPassword(String maCv) {
         CVHTJpaEntity cvht = cvhtRepo.findById(maCv)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy CVHT có mã: " + maCv));
         

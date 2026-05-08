@@ -1,7 +1,6 @@
 package com.hoidap.hoidapdemo.controller.api.auth;
 
 import com.hoidap.hoidapdemo.service.port.UserServicePort;
-import java.util.Optional;
 import com.hoidap.hoidapdemo.dto.auth.AuthResponse;
 import com.hoidap.hoidapdemo.dto.auth.LoginRequest;
 import com.hoidap.hoidapdemo.dto.common.ApiResponse;
@@ -16,9 +15,6 @@ import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import java.util.HashMap;
-
-
 @RestController
 @RequestMapping("/api/auth")
 @Tag(name = "Quản lý Đăng ký, Đăng nhập")
@@ -30,32 +26,25 @@ public class AuthController {
         this.userService = userService;
     }
 
-//    @PostMapping("/register")
-//    @Operation(summary = "Đăng ký")
-//    public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody RegisterRequest request) {
-//        String userId = userService.register(
-//                request.getEmail(),
-//                request.getPassword(),
-//                request.getHoTen(),
-//                request.getSoDienThoai(),
-//                request.getRole()
-//        );
-//
-//        AuthResponse response = AuthResponse.builder()
-//                .status(AppStatus.SUCCESS.getCode())
-//                .message(AppStatus.SUCCESS.getMessage())
-//                .build();
-//        return ResponseEntity.ok(response);
-//    }
+    // @PostMapping("/register")
+    // @Operation(summary = "Đăng ký")
+    // public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody
+    // RegisterRequest request) {
+    // String userId = userService.register(
+    // request.getEmail(),
+    // request.getPassword(),
+    // request.getHoTen(),
+    // request.getSoDienThoai(),
+    // request.getRole()
+    // );
+    //
+    // AuthResponse response = AuthResponse.builder()
+    // .status(AppStatus.SUCCESS.getCode())
+    // .message(AppStatus.SUCCESS.getMessage())
+    // .build();
+    // return ResponseEntity.ok(response);
+    // }
 
-    /**
-     * API Đăng nhập.
-     * @param request: Chứa Email và Password người dùng nhập.
-     * Logic:
-     * 1. Gọi Service kiểm tra email/pass.
-     * 2. Nếu đúng -> Sinh ra chuỗi JWT Token.
-     * 3. Trả Token về cho Frontend lưu (thường lưu ở LocalStorage).
-     */
     @PostMapping("/login")
     @Operation(summary = "Đăng nhập")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
@@ -75,25 +64,20 @@ public class AuthController {
                     AuthResponse.builder()
                             .status(401)
                             .message("Tài khoản hoặc mật khẩu không chính xác.")
-                            .build()
-            );
+                            .build());
         } catch (Exception e) {
             return ResponseEntity.status(401).body(
                     AuthResponse.builder()
                             .status(401)
                             .message("Đăng nhập thất bại: Lỗi hệ thống.")
-                            .build()
-            );
+                            .build());
         }
     }
 
-    /**
-     * API Cập nhật thông tin cá nhân (SĐT, Họ tên...).
-     * @param authentication: Lấy từ Security Context để biết ai đang gọi API này (không cho sửa hộ người khác).
-     */
     @PostMapping("/profile/update")
     @Operation(summary = "Cập nhật thông tin")
-    public ResponseEntity<AuthResponse> updateProfile(@Valid @RequestBody ProfileUpdateRequest request, Authentication authentication) {
+    public ResponseEntity<AuthResponse> updateProfile(@Valid @RequestBody ProfileUpdateRequest request,
+            Authentication authentication) {
         String email = authentication.getName();
         try {
             userService.updateProfile(email, request);
@@ -115,12 +99,11 @@ public class AuthController {
         }
     }
 
-    /**
-     * API Đổi mật khẩu
-     */
     @PostMapping("/password/change")
     @Operation(summary = "Đổi mật khẩu")
-    public ResponseEntity<AuthResponse> changePassword(@Valid @RequestBody com.hoidap.hoidapdemo.dto.auth.ChangePasswordRequest request, Authentication authentication) {
+    public ResponseEntity<AuthResponse> changePassword(
+            @Valid @RequestBody com.hoidap.hoidapdemo.dto.auth.ChangePasswordRequest request,
+            Authentication authentication) {
         String email = authentication.getName();
         try {
             userService.changePassword(email, request.getCurrentPassword(), request.getNewPassword());

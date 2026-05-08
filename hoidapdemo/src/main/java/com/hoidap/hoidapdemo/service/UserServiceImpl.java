@@ -153,8 +153,7 @@ public class UserServiceImpl implements UserServicePort {
         var cvhtOpt = cvhtRepo.findByEmail(email);
         if (cvhtOpt.isPresent()) {
             CVHTJpaEntity cv = cvhtOpt.get();
-            
-            // Lấy danh sách lớp trực tiếp từ Repo để tránh lỗi Lazy Loading hoặc Mapping
+
             List<LopJpaEntity> classes = lopRepo.findByCvhtId(cv.getMaCv());
             List<String> managedClassList = classes.stream()
                     .map(LopJpaEntity::getMaLop)
@@ -178,8 +177,7 @@ public class UserServiceImpl implements UserServicePort {
         // Xác thực mật khẩu cũ bằng cách mô phỏng hành động đăng nhập
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(email, currentPassword)
-            );
+                    new UsernamePasswordAuthenticationToken(email, currentPassword));
         } catch (Exception e) {
             throw new IllegalArgumentException("Mật khẩu hiện tại không chính xác.");
         }
@@ -376,7 +374,8 @@ public class UserServiceImpl implements UserServicePort {
     }
 
     @Override
-    public org.springframework.data.domain.Page<CVHTJpaEntity> getAllCVHT(String keyword, org.springframework.data.domain.Pageable pageable) {
+    public org.springframework.data.domain.Page<CVHTJpaEntity> getAllCVHT(String keyword,
+            org.springframework.data.domain.Pageable pageable) {
         if (keyword != null && !keyword.trim().isEmpty()) {
             return cvhtRepo.searchCVHT(keyword.trim(), pageable);
         }

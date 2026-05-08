@@ -5,5 +5,5 @@ import com.hoidap.hoidapdemo.dto.auth.CreateUserRequest;
 
 public interface AdminServicePort {
     AccountCreatedResponse createStudentAccount(CreateUserRequest request);
-    AccountCreatedResponse createAdvisorAccount(CreateUserRequest request);
+    AccountCreatedResponse createCVHTAccount(CreateUserRequest request);
 }

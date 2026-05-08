@@ -36,7 +36,7 @@ public class ReportServiceImpl implements ReportServicePort {
         ).toList();
 
         // Lấy hiệu suất CVHT
-        List<Object[]> advisorRaw = conversationRepo.findAdvisorPerformance();
+        List<Object[]> advisorRaw = conversationRepo.findCVHTPerformance();
         List<AdvisorStat> advisorStats = advisorRaw.stream().map(obj -> {
             Double avgTime = obj[1] != null ? ((Number) obj[1]).doubleValue() : 0.0;
             Long advAnswered = obj[2] != null ? ((Number) obj[2]).longValue() : 0L;
