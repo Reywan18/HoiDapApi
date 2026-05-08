@@ -18,6 +18,9 @@ public interface ConversationJpaRepository
     // Tìm các cuộc hội thoại của 1 sinh viên cấp cụ thể (Loại trừ Bot)
     Page<ConversationJpaEntity> findBySinhVien_MaSvAndTrangThaiNot(String maSv, ConversationStatus trangThai, Pageable pageable);
 
+    // Tìm các cuộc hội thoại của 1 sinh viên có chứa keyword trong tiêu đề
+    Page<ConversationJpaEntity> findBySinhVien_MaSvAndTrangThaiNotAndTieuDeContainingIgnoreCase(String maSv, ConversationStatus trangThai, String keyword, Pageable pageable);
+
     // Tìm các cuộc hội thoại đang được một CVHT cụ thể đảm nhận (Loại trừ Bot)
     Page<ConversationJpaEntity> findByCvht_MaCvAndTrangThaiNot(String maCv, ConversationStatus trangThai, Pageable pageable);
 
@@ -26,7 +29,17 @@ public interface ConversationJpaRepository
     @Query("SELECT c.sinhVien.hoTen, c.sinhVien.maSv, COUNT(c) FROM ConversationJpaEntity c GROUP BY c.sinhVien.hoTen, c.sinhVien.maSv ORDER BY COUNT(c) DESC")
     List<Object[]> findTopStudents(Pageable pageable);
 
-    @Query(value = "SELECT c.ho_ten, AVG(TIMESTAMPDIFF(HOUR, conv.ngay_tao, conv.ngay_cap_nhat_cuoi)) FROM conversation conv JOIN cvht c ON conv.ma_cv = c.ma_cv WHERE conv.ma_cv IS NOT NULL GROUP BY c.ho_ten", nativeQuery = true)
+    @Query(value = "SELECT " +
+           "  c.ho_ten, " +
+           "  AVG(TIMESTAMPDIFF(HOUR, conv.ngay_tao, conv.ngay_cap_nhat_cuoi)) as avg_time, " +
+           "  COUNT(CASE WHEN conv.trang_thai = 'RESOLVED' THEN 1 END) as answered_count, " +
+           "  (SELECT COUNT(*) FROM conversation conv2 " +
+           "   JOIN sinh_vien sv2 ON conv2.ma_sv = sv2.ma_sv " +
+           "   JOIN lop l2 ON sv2.ma_lop = l2.ma_lop " +
+           "   WHERE l2.ma_cvht = c.ma_cv) as total_questions " +
+           "FROM cvht c " +
+           "LEFT JOIN conversation conv ON conv.ma_cv = c.ma_cv " +
+           "GROUP BY c.ma_cv, c.ho_ten", nativeQuery = true)
     List<Object[]> findAdvisorPerformance();
 
     @Query("SELECT c.sinhVien.lop.maLop, c.sinhVien.lop.chuyenNganh, COUNT(c) FROM ConversationJpaEntity c GROUP BY c.sinhVien.lop.maLop, c.sinhVien.lop.chuyenNganh")

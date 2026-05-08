@@ -13,4 +13,7 @@ import org.springframework.data.repository.query.Param;
 public interface LopJpaRepository extends JpaRepository<LopJpaEntity, String> {
     @Query("SELECT l FROM LopJpaEntity l WHERE LOWER(l.maLop) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(l.chuyenNganh) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<LopJpaEntity> searchLop(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT l FROM LopJpaEntity l WHERE TRIM(LOWER(l.cvht.maCv)) = TRIM(LOWER(:maCv))")
+    java.util.List<LopJpaEntity> findByCvhtId(@Param("maCv") String maCv);
 }

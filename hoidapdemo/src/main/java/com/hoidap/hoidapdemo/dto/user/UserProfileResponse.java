@@ -17,4 +17,6 @@ public class UserProfileResponse {
 
     private String maCoVan;
     private String tenCoVan;
+
+    private java.util.List<String> managedClasses;
 }

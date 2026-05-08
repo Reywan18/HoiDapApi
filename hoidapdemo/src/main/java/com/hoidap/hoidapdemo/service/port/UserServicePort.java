@@ -5,6 +5,8 @@ import com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity;
 import com.hoidap.hoidapdemo.dto.user.ProfileUpdateRequest;
 import com.hoidap.hoidapdemo.dto.user.UserDto;
 
+import com.hoidap.hoidapdemo.dto.user.UserProfileResponse;
+
 import java.util.List;
 
 public interface UserServicePort {
@@ -15,7 +17,11 @@ public interface UserServicePort {
 
     UserDto getUserByEmail(String email);
 
+    UserProfileResponse getMyProfile(String email);
+
     void updateProfile(String email, ProfileUpdateRequest request);
+
+    void changePassword(String email, String currentPassword, String newPassword);
 
     List<SinhVienJpaEntity> getAllSinhVien();
 
