@@ -68,9 +68,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Tài liệu API (Swagger)
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        // Dành riêng cho ADMIN
-                        .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN", "ROLE_ADMIN")
-                        .requestMatchers("/api/reports/**").hasAnyAuthority("ADMIN", "ROLE_ADMIN")
+                        // Dành riêng cho ADMIN & CVHT (Báo cáo)
+                        .requestMatchers("/api/reports/**").hasAnyAuthority("ADMIN", "ROLE_ADMIN", "CVHT", "ROLE_CVHT")
                         // API Chung
                         .requestMatchers("/api/auth/register", "/api/auth/login", "/api/setup/**", "/api/classes/**")
                         .permitAll()

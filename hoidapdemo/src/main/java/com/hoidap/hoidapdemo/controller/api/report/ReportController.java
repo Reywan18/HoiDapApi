@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,6 +30,16 @@ public class ReportController {
         return ResponseEntity.ok(ApiResponse.<DashboardStats>builder()
                 .status(200)
                 .message("Lấy báo cáo thành công")
+                .data(stats)
+                .build());
+    }
+
+    @GetMapping("/cvht/{maCv}")
+    public ResponseEntity<ApiResponse<DashboardStats>> getAdvisorDashboard(@PathVariable String maCv) {
+        DashboardStats stats = reportService.getDashboardStatsForAdvisor(maCv);
+        return ResponseEntity.ok(ApiResponse.<DashboardStats>builder()
+                .status(200)
+                .message("Lấy báo cáo cố vấn thành công")
                 .data(stats)
                 .build());
     }

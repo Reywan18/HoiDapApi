@@ -16,10 +16,13 @@ import com.hoidap.hoidapdemo.repository.chat.MessageJpaRepository;
 import com.hoidap.hoidapdemo.repository.sinhvien.SinhVienJpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import jakarta.persistence.criteria.Predicate;
+import java.util.ArrayList;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,15 +35,18 @@ public class ConversationController {
     private final ConversationJpaRepository conversationRepo;
     private final MessageJpaRepository messageRepo;
     private final SinhVienJpaRepository sinhVienRepo;
+    private final com.hoidap.hoidapdemo.repository.lop.LopJpaRepository lopRepo;
     private final org.springframework.messaging.simp.SimpMessagingTemplate messagingTemplate;
 
     public ConversationController(ConversationJpaRepository conversationRepo,
             MessageJpaRepository messageRepo,
             SinhVienJpaRepository sinhVienRepo,
+            com.hoidap.hoidapdemo.repository.lop.LopJpaRepository lopRepo,
             org.springframework.messaging.simp.SimpMessagingTemplate messagingTemplate) {
         this.conversationRepo = conversationRepo;
         this.messageRepo = messageRepo;
         this.sinhVienRepo = sinhVienRepo;
+        this.lopRepo = lopRepo;
         this.messagingTemplate = messagingTemplate;
     }
 
@@ -70,20 +76,76 @@ public class ConversationController {
                 .build());
     }
 
-    // 2. Lấy danh sách phòng chat mà CVHT đang quản lý
+    // 2. Lấy danh sách phòng chat mà CVHT đang quản lý (Hỗ trợ lọc)
     @GetMapping("/cvht/{maCv}")
     public ResponseEntity<ApiResponse<Page<ConversationResponseDto>>> getCVHTConversations(
             @PathVariable String maCv,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<ConversationResponseDto> responsePage = conversationRepo
-                .findByCvht_MaCvAndTrangThaiNot(maCv, ConversationStatus.CHATTING_WITH_BOT, PageRequest.of(page, size))
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String trangThai,
+            @RequestParam(required = false) String maLop,
+            @RequestParam(required = false) String keyword) {
+        
+        Specification<ConversationJpaEntity> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            
+            // Luôn lọc theo mã CVHT
+            predicates.add(cb.equal(root.get("cvht").get("maCv"), maCv));
+            
+            // Loại trừ Chat với Bot mặc định (hoặc theo yêu cầu hệ thống)
+            predicates.add(cb.notEqual(root.get("trangThai"), ConversationStatus.CHATTING_WITH_BOT));
+            
+            // Lọc theo trạng thái nếu có
+            if (trangThai != null && !trangThai.trim().isEmpty() && !trangThai.equalsIgnoreCase("ALL")) {
+                if (trangThai.equalsIgnoreCase("OPEN")) {
+                    predicates.add(cb.notEqual(root.get("trangThai"), ConversationStatus.RESOLVED));
+                    predicates.add(cb.notEqual(root.get("trangThai"), ConversationStatus.REPORTED));
+                } else {
+                    try {
+                        predicates.add(cb.equal(root.get("trangThai"), ConversationStatus.valueOf(trangThai.toUpperCase())));
+                    } catch (IllegalArgumentException ignored) {}
+                }
+            }
+            
+            // Lọc theo mã lớp nếu có
+            if (maLop != null && !maLop.trim().isEmpty() && !maLop.equalsIgnoreCase("ALL")) {
+                predicates.add(cb.equal(root.get("sinhVien").get("lop").get("maLop"), maLop));
+            }
+            
+            // Lọc theo từ khóa (tiêu đề hoặc tên sinh viên)
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                String pattern = "%" + keyword.trim().toLowerCase() + "%";
+                Predicate titleLike = cb.like(cb.lower(root.get("tieuDe")), pattern);
+                Predicate studentNameLike = cb.like(cb.lower(root.get("sinhVien").get("hoTen")), pattern);
+                predicates.add(cb.or(titleLike, studentNameLike));
+            }
+            
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        Page<ConversationResponseDto> responsePage = conversationRepo.findAll(spec, PageRequest.of(page, size))
                 .map(this::mapToDto);
 
         return ResponseEntity.ok(ApiResponse.<Page<ConversationResponseDto>>builder()
                 .status(AppStatus.SUCCESS.getCode())
                 .message("Lấy danh sách thành công")
                 .data(responsePage)
+                .build());
+    }
+
+    // Lấy danh sách lớp mà CVHT quản lý để hiển thị bộ lọc (Lấy trực tiếp từ bảng Lớp và Sắp xếp)
+    @GetMapping("/cvht/{maCv}/classes")
+    public ResponseEntity<ApiResponse<List<String>>> getAdvisorClasses(@PathVariable String maCv) {
+        List<String> classes = lopRepo.findByCvhtId(maCv)
+                .stream()
+                .map(com.hoidap.hoidapdemo.entity.lop.LopJpaEntity::getMaLop)
+                .sorted() // Sắp xếp A-Z
+                .collect(java.util.stream.Collectors.toList());
+                
+        return ResponseEntity.ok(ApiResponse.<List<String>>builder()
+                .status(AppStatus.SUCCESS.getCode())
+                .message("Lấy danh sách lớp thành công")
+                .data(classes)
                 .build());
     }
 
@@ -131,9 +193,13 @@ public class ConversationController {
                 .build());
     }
 
-    // 6. Sinh viên tạo nhanh 1 câu hỏi mới
-    @PostMapping
-    public ResponseEntity<?> createConversation(@RequestBody CreateConversationRequestDto request) {
+    // 6. Sinh viên tạo nhanh 1 câu hỏi mới (Hỗ trợ đính kèm tệp ngay lúc tạo)
+    @PostMapping(consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> createConversation(
+            @RequestPart("tieuDe") String tieuDe,
+            @RequestPart("noiDung") String noiDung,
+            @RequestPart(value = "file", required = false) org.springframework.web.multipart.MultipartFile file) {
+        
         // Lấy Email từ Token
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentEmail = auth.getName();
@@ -149,8 +215,8 @@ public class ConversationController {
         if (sv.getLop() != null && sv.getLop().getCvht() != null) {
             conversation.setCvht(sv.getLop().getCvht());
         }
-        conversation.setTieuDe(request.getTieuDe());
-        conversation.setTrangThai(ConversationStatus.CHATTING_WITH_CVHT); // Có thể đổi sang BOT nếu có AI
+        conversation.setTieuDe(tieuDe);
+        conversation.setTrangThai(ConversationStatus.CHATTING_WITH_CVHT); 
         conversation.setNgayTao(LocalDateTime.now());
         conversation.setNgayCapNhatCuoi(LocalDateTime.now());
 
@@ -161,8 +227,23 @@ public class ConversationController {
         firstMessage.setConversation(conversation);
         firstMessage.setNguoiGuiType(SenderType.SINH_VIEN);
         firstMessage.setNguoiGuiId(sv.getMaSv());
-        firstMessage.setNoiDung(request.getNoiDung());
+        firstMessage.setNoiDung(noiDung);
         firstMessage.setThoiGianGui(LocalDateTime.now());
+
+        // Nếu có tệp đính kèm
+        if (file != null && !file.isEmpty()) {
+            try {
+                firstMessage.setFileName(file.getOriginalFilename());
+                firstMessage.setFileType(file.getContentType());
+                firstMessage.setFileData(file.getBytes());
+                // Nếu nội dung trống, dùng tên file làm nội dung
+                if (noiDung == null || noiDung.trim().isEmpty()) {
+                    firstMessage.setNoiDung("Đã đính kèm tệp: " + file.getOriginalFilename());
+                }
+            } catch (java.io.IOException e) {
+                System.err.println("Lỗi lưu file khi tạo hội thoại: " + e.getMessage());
+            }
+        }
 
         messageRepo.save(firstMessage);
 

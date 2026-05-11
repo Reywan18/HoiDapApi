@@ -65,10 +65,43 @@ public class ReportServiceImpl {
         return DashboardStats.builder()
                 .totalQuestions(total)
                 .totalAnswered(answered)
+                .pendingQuestions(total - answered)
+                .studentsCount(conversationRepo.countDistinctStudents())
                 .resolutionRate(Math.round(rate * 100.0) / 100.0)
                 .topStudents(topStudents)
                 .advisorStats(advisorStats)
                 .classStats(classStats)
+                .weeklyTrend(java.util.Arrays.asList(0L, 0L, 0L, 0L, 0L, 0L, 0L))
+                .build();
+    }
+
+    public DashboardStats getDashboardStatsForAdvisor(String maCv) {
+        long total = conversationRepo.countByCvht_MaCv(maCv);
+        long answered = conversationRepo.countByCvht_MaCvAndTrangThai(maCv, ConversationStatus.RESOLVED);
+        long waiting = conversationRepo.countByCvht_MaCvAndTrangThai(maCv, ConversationStatus.WAITING_FOR_CVHT);
+        long chatting = conversationRepo.countByCvht_MaCvAndTrangThai(maCv, ConversationStatus.CHATTING_WITH_CVHT);
+        long reported = conversationRepo.countByCvht_MaCvAndTrangThai(maCv, ConversationStatus.REPORTED);
+        
+        long studentsCount = conversationRepo.countDistinctStudentsByAdvisor(maCv);
+        
+        // Weekly Trend
+        List<Object[]> weeklyTrendRaw = conversationRepo.findWeeklyTrendByAdvisor(maCv);
+        Long[] weeklyTrend = new Long[7];
+        for(int i=0; i<7; i++) weeklyTrend[i] = 0L;
+        
+        for (Object[] obj : weeklyTrendRaw) {
+            int dayOfWeek = ((Number) obj[0]).intValue(); // 1 (Sun) to 7 (Sat)
+            int index = (dayOfWeek + 5) % 7; // Chuyển sang 0 (Mon) to 6 (Sun)
+            weeklyTrend[index] = ((Number) obj[1]).longValue();
+        }
+
+        return DashboardStats.builder()
+                .totalQuestions(total)
+                .totalAnswered(answered)
+                .pendingQuestions(waiting + chatting + reported)
+                .studentsCount(studentsCount)
+                .resolutionRate(total == 0 ? 0 : Math.round(((double) answered / total) * 100.0 * 10.0) / 10.0)
+                .weeklyTrend(java.util.Arrays.asList(weeklyTrend))
                 .build();
     }
 }

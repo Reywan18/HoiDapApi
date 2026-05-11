@@ -50,4 +50,23 @@ public interface ConversationJpaRepository
            "LOWER(c.sinhVien.hoTen) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
            "LOWER(c.cvht.hoTen) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<ConversationJpaEntity> searchAllConversations(@org.springframework.data.repository.query.Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT DISTINCT c.sinhVien.lop.maLop FROM ConversationJpaEntity c WHERE c.cvht.maCv = :maCv AND c.sinhVien.lop.maLop IS NOT NULL")
+    List<String> findClassesByAdvisor(@org.springframework.data.repository.query.Param("maCv") String maCv);
+
+    long countByCvht_MaCv(String maCv);
+
+    long countByCvht_MaCvAndTrangThai(String maCv, ConversationStatus trangThai);
+
+    @Query("SELECT COUNT(DISTINCT c.sinhVien.maSv) FROM ConversationJpaEntity c WHERE c.cvht.maCv = :maCv")
+    long countDistinctStudentsByAdvisor(@org.springframework.data.repository.query.Param("maCv") String maCv);
+
+    @Query("SELECT COUNT(DISTINCT c.sinhVien.maSv) FROM ConversationJpaEntity c")
+    long countDistinctStudents();
+
+    @Query(value = "SELECT DAYOFWEEK(ngay_tao) as day, COUNT(*) as count " +
+           "FROM conversation WHERE ma_cv = :maCv " +
+           "AND ngay_tao >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) " +
+           "GROUP BY DAYOFWEEK(ngay_tao)", nativeQuery = true)
+    List<Object[]> findWeeklyTrendByAdvisor(@org.springframework.data.repository.query.Param("maCv") String maCv);
 }
