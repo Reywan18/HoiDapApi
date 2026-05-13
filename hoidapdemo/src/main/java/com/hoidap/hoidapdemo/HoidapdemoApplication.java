@@ -22,10 +22,10 @@ public class HoidapdemoApplication {
 	public CommandLineRunner updateAdminAccount(AdminJpaRepository adminRepo, PasswordEncoder passwordEncoder) {
 		return args -> {
 			adminRepo.findByEmail("admin").ifPresent(admin -> {
-				admin.setEmail("admin@thanglong.edu.vn");
+				admin.setEmail("admin@a.edu.vn");
 				admin.setPassword(passwordEncoder.encode("111111"));
 				adminRepo.save(admin);
-				System.out.println("====== Da cap nhat tai khoan admin thanh admin@thanglong.edu.vn ======");
+				System.out.println("====== Da cap nhat tai khoan admin thanh admin@a.edu.vn ======");
 			});
 		};
 	}

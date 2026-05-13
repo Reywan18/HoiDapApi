@@ -76,7 +76,7 @@ public class ReportServiceImpl implements ReportServicePort {
                 .build();
     }
 
-    public DashboardStats getDashboardStatsForAdvisor(String maCv) {
+    public DashboardStats getDashboardStatsForCVHT(String maCv) {
         long total = conversationRepo.countByCvht_MaCv(maCv);
         long answered = conversationRepo.countByCvht_MaCvAndTrangThai(maCv, ConversationStatus.RESOLVED);
         long waiting = conversationRepo.countByCvht_MaCvAndTrangThai(maCv, ConversationStatus.WAITING_FOR_CVHT);

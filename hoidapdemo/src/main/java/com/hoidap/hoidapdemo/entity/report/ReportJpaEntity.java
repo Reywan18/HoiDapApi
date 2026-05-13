@@ -14,13 +14,14 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BaoCaoJpaEntity {
+public class ReportJpaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "conversation_id", nullable = false)
-    private Long conversationId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "conversation_id", nullable = false)
+    private com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity conversation;
 
     @Column(name = "ly_do", length = 500)
     private String lyDo;

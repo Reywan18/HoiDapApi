@@ -4,7 +4,9 @@ import com.hoidap.hoidapdemo.dto.chat.ConversationResponseDto;
 import com.hoidap.hoidapdemo.dto.chat.MessageResponseDto;
 import com.hoidap.hoidapdemo.dto.common.ApiResponse;
 import com.hoidap.hoidapdemo.utils.AppStatus;
+import com.hoidap.hoidapdemo.entity.lop.LopJpaEntity;
 import com.hoidap.hoidapdemo.dto.chat.CreateConversationRequestDto;
+import com.hoidap.hoidapdemo.repository.lop.LopJpaRepository;
 import com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity;
 import com.hoidap.hoidapdemo.entity.chat.MessageJpaEntity;
 import com.hoidap.hoidapdemo.entity.enums.ConversationStatus;
@@ -17,10 +19,17 @@ import com.hoidap.hoidapdemo.repository.sinhvien.SinhVienJpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import com.hoidap.hoidapdemo.service.port.AiServicePort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.http.MediaType;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 
@@ -35,19 +44,22 @@ public class ConversationController {
     private final ConversationJpaRepository conversationRepo;
     private final MessageJpaRepository messageRepo;
     private final SinhVienJpaRepository sinhVienRepo;
-    private final com.hoidap.hoidapdemo.repository.lop.LopJpaRepository lopRepo;
-    private final org.springframework.messaging.simp.SimpMessagingTemplate messagingTemplate;
+    private final LopJpaRepository lopRepo;
+    private final SimpMessagingTemplate messagingTemplate;
+    private final AiServicePort aiService;
 
     public ConversationController(ConversationJpaRepository conversationRepo,
             MessageJpaRepository messageRepo,
             SinhVienJpaRepository sinhVienRepo,
-            com.hoidap.hoidapdemo.repository.lop.LopJpaRepository lopRepo,
-            org.springframework.messaging.simp.SimpMessagingTemplate messagingTemplate) {
+            LopJpaRepository lopRepo,
+            SimpMessagingTemplate messagingTemplate,
+            AiServicePort aiService) {
         this.conversationRepo = conversationRepo;
         this.messageRepo = messageRepo;
         this.sinhVienRepo = sinhVienRepo;
         this.lopRepo = lopRepo;
         this.messagingTemplate = messagingTemplate;
+        this.aiService = aiService;
     }
 
     // 1. Lấy danh sách phòng chat của 1 sinh viên
@@ -57,15 +69,17 @@ public class ConversationController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false, defaultValue = "") String keyword) {
-        
+
         Page<ConversationResponseDto> responsePage;
         if (keyword != null && !keyword.trim().isEmpty()) {
             responsePage = conversationRepo
-                    .findBySinhVien_MaSvAndTrangThaiNotAndTieuDeContainingIgnoreCase(maSv, ConversationStatus.CHATTING_WITH_BOT, keyword.trim(), PageRequest.of(page, size))
+                    .findBySinhVien_MaSvAndTrangThaiNotAndTieuDeContainingIgnoreCase(maSv,
+                            ConversationStatus.CHATTING_WITH_BOT, keyword.trim(), PageRequest.of(page, size))
                     .map(this::mapToDto);
         } else {
             responsePage = conversationRepo
-                    .findBySinhVien_MaSvAndTrangThaiNot(maSv, ConversationStatus.CHATTING_WITH_BOT, PageRequest.of(page, size))
+                    .findBySinhVien_MaSvAndTrangThaiNot(maSv, ConversationStatus.CHATTING_WITH_BOT,
+                            PageRequest.of(page, size))
                     .map(this::mapToDto);
         }
 
@@ -85,16 +99,16 @@ public class ConversationController {
             @RequestParam(required = false) String trangThai,
             @RequestParam(required = false) String maLop,
             @RequestParam(required = false) String keyword) {
-        
+
         Specification<ConversationJpaEntity> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
-            
+
             // Luôn lọc theo mã CVHT
             predicates.add(cb.equal(root.get("cvht").get("maCv"), maCv));
-            
+
             // Loại trừ Chat với Bot mặc định (hoặc theo yêu cầu hệ thống)
             predicates.add(cb.notEqual(root.get("trangThai"), ConversationStatus.CHATTING_WITH_BOT));
-            
+
             // Lọc theo trạng thái nếu có
             if (trangThai != null && !trangThai.trim().isEmpty() && !trangThai.equalsIgnoreCase("ALL")) {
                 if (trangThai.equalsIgnoreCase("OPEN")) {
@@ -102,16 +116,18 @@ public class ConversationController {
                     predicates.add(cb.notEqual(root.get("trangThai"), ConversationStatus.REPORTED));
                 } else {
                     try {
-                        predicates.add(cb.equal(root.get("trangThai"), ConversationStatus.valueOf(trangThai.toUpperCase())));
-                    } catch (IllegalArgumentException ignored) {}
+                        predicates.add(
+                                cb.equal(root.get("trangThai"), ConversationStatus.valueOf(trangThai.toUpperCase())));
+                    } catch (IllegalArgumentException ignored) {
+                    }
                 }
             }
-            
+
             // Lọc theo mã lớp nếu có
             if (maLop != null && !maLop.trim().isEmpty() && !maLop.equalsIgnoreCase("ALL")) {
                 predicates.add(cb.equal(root.get("sinhVien").get("lop").get("maLop"), maLop));
             }
-            
+
             // Lọc theo từ khóa (tiêu đề hoặc tên sinh viên)
             if (keyword != null && !keyword.trim().isEmpty()) {
                 String pattern = "%" + keyword.trim().toLowerCase() + "%";
@@ -119,7 +135,7 @@ public class ConversationController {
                 Predicate studentNameLike = cb.like(cb.lower(root.get("sinhVien").get("hoTen")), pattern);
                 predicates.add(cb.or(titleLike, studentNameLike));
             }
-            
+
             return cb.and(predicates.toArray(new Predicate[0]));
         };
 
@@ -133,15 +149,16 @@ public class ConversationController {
                 .build());
     }
 
-    // Lấy danh sách lớp mà CVHT quản lý để hiển thị bộ lọc (Lấy trực tiếp từ bảng Lớp và Sắp xếp)
+    // Lấy danh sách lớp mà CVHT quản lý để hiển thị bộ lọc (Lấy trực tiếp từ bảng
+    // Lớp và Sắp xếp)
     @GetMapping("/cvht/{maCv}/classes")
     public ResponseEntity<ApiResponse<List<String>>> getAdvisorClasses(@PathVariable String maCv) {
         List<String> classes = lopRepo.findByCvhtId(maCv)
                 .stream()
-                .map(com.hoidap.hoidapdemo.entity.lop.LopJpaEntity::getMaLop)
+                .map(LopJpaEntity::getMaLop)
                 .sorted() // Sắp xếp A-Z
                 .collect(java.util.stream.Collectors.toList());
-                
+
         return ResponseEntity.ok(ApiResponse.<List<String>>builder()
                 .status(AppStatus.SUCCESS.getCode())
                 .message("Lấy danh sách lớp thành công")
@@ -187,6 +204,33 @@ public class ConversationController {
         entity.setNgayCapNhatCuoi(LocalDateTime.now());
         conversationRepo.save(entity);
 
+        // --- Cập nhật kiến thức vào AI ChromaDB ---
+        try {
+            List<MessageJpaEntity> messages = messageRepo.findByConversation_IdOrderByThoiGianGuiAsc(id);
+            if (messages != null && !messages.isEmpty()) {
+                
+                StringBuilder fullConversationText = new StringBuilder();
+                fullConversationText.append("Hỏi đáp giữa Sinh viên và Cố vấn học tập:\n");
+                
+                for (MessageJpaEntity msg : messages) {
+                    if (msg.getNguoiGuiType() == SenderType.SINH_VIEN) {
+                        fullConversationText.append("Sinh viên: ").append(msg.getNoiDung()).append("\n");
+                    } else {
+                        fullConversationText.append("CVHT: ").append(msg.getNoiDung()).append("\n");
+                    }
+                }
+                
+                // Lấy Tiêu đề của cuộc trò chuyện làm câu hỏi trọng tâm để check trùng lặp
+                String questionToCheck = entity.getTieuDe();
+                
+                // Gọi AI Service để lưu
+                aiService.saveTextToDb(questionToCheck, fullConversationText.toString());
+            }
+        } catch (Exception e) {
+            System.err.println("Lỗi khi cập nhật kiến thức vào ChromaDB: " + e.getMessage());
+            // Không throw exception để không làm gián đoạn luồng API chính
+        }
+
         return ResponseEntity.ok(ApiResponse.<Void>builder()
                 .status(AppStatus.SUCCESS.getCode())
                 .message("Đã đánh dấu câu hỏi là hoàn thành")
@@ -194,12 +238,12 @@ public class ConversationController {
     }
 
     // 6. Sinh viên tạo nhanh 1 câu hỏi mới (Hỗ trợ đính kèm tệp ngay lúc tạo)
-    @PostMapping(consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createConversation(
             @RequestPart("tieuDe") String tieuDe,
             @RequestPart("noiDung") String noiDung,
-            @RequestPart(value = "file", required = false) org.springframework.web.multipart.MultipartFile file) {
-        
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+
         // Lấy Email từ Token
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentEmail = auth.getName();
@@ -216,7 +260,7 @@ public class ConversationController {
             conversation.setCvht(sv.getLop().getCvht());
         }
         conversation.setTieuDe(tieuDe);
-        conversation.setTrangThai(ConversationStatus.CHATTING_WITH_CVHT); 
+        conversation.setTrangThai(ConversationStatus.CHATTING_WITH_CVHT);
         conversation.setNgayTao(LocalDateTime.now());
         conversation.setNgayCapNhatCuoi(LocalDateTime.now());
 
@@ -257,7 +301,7 @@ public class ConversationController {
     @PostMapping("/{id}/upload")
     public ResponseEntity<ApiResponse<MessageResponseDto>> uploadFile(
             @PathVariable Long id,
-            @RequestParam("file") org.springframework.web.multipart.MultipartFile file,
+            @RequestParam("file") MultipartFile file,
             @RequestParam("senderId") String senderId,
             @RequestParam("senderType") String senderType,
             @RequestParam(value = "content", required = false) String content) {
@@ -267,13 +311,13 @@ public class ConversationController {
 
             MessageJpaEntity messageEntity = new MessageJpaEntity();
             messageEntity.setConversation(conversation);
-            
+
             if (content != null && !content.trim().isEmpty()) {
                 messageEntity.setNoiDung(content);
             } else {
                 messageEntity.setNoiDung("Đã đính kèm tệp: " + file.getOriginalFilename());
             }
-            
+
             messageEntity.setThoiGianGui(LocalDateTime.now());
             messageEntity.setNguoiGuiId(senderId);
             messageEntity.setNguoiGuiType(SenderType.valueOf(senderType));
@@ -302,7 +346,7 @@ public class ConversationController {
     }
 
     @GetMapping("/messages/{messageId}/download")
-    public ResponseEntity<org.springframework.core.io.Resource> downloadFile(@PathVariable Long messageId) {
+    public ResponseEntity<Resource> downloadFile(@PathVariable Long messageId) {
         MessageJpaEntity message = messageRepo.findById(messageId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy tin nhắn"));
 
@@ -310,11 +354,14 @@ public class ConversationController {
             throw new RuntimeException("Tin nhắn không có file đính kèm");
         }
 
-        org.springframework.core.io.ByteArrayResource resource = new org.springframework.core.io.ByteArrayResource(message.getFileData());
+        ByteArrayResource resource = new ByteArrayResource(
+                message.getFileData());
 
         return ResponseEntity.ok()
-                .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + message.getFileName() + "\"")
-                .contentType(org.springframework.http.MediaType.parseMediaType(message.getFileType() != null ? message.getFileType() : "application/octet-stream"))
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + message.getFileName() + "\"")
+                .contentType(MediaType.parseMediaType(
+                        message.getFileType() != null ? message.getFileType() : "application/octet-stream"))
                 .body(resource);
     }
 

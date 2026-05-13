@@ -1,13 +1,17 @@
 package com.hoidap.hoidapdemo.controller.api.admin;
 
 import com.hoidap.hoidapdemo.entity.faq.FAQJpaEntity;
+import com.hoidap.hoidapdemo.entity.admin.AdminJpaEntity;
 import com.hoidap.hoidapdemo.repository.faq.FAQJpaRepository;
+import com.hoidap.hoidapdemo.repository.admin.AdminJpaRepository;
 import com.hoidap.hoidapdemo.repository.faq.FAQSpecification;
 import com.hoidap.hoidapdemo.dto.faq.FAQFilter;
 import com.hoidap.hoidapdemo.dto.common.ApiResponse;
 import com.hoidap.hoidapdemo.utils.AppStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,9 +22,11 @@ import java.util.List;
 public class AdminFAQApiController {
 
     private final FAQJpaRepository faqRepo;
+    private final AdminJpaRepository adminRepo;
 
-    public AdminFAQApiController(FAQJpaRepository faqRepo) {
+    public AdminFAQApiController(FAQJpaRepository faqRepo, AdminJpaRepository adminRepo) {
         this.faqRepo = faqRepo;
+        this.adminRepo = adminRepo;
     }
 
     @GetMapping
@@ -28,9 +34,10 @@ public class AdminFAQApiController {
             @ModelAttribute FAQFilter filter,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        
-        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size, org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "maFaq"));
-        
+
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size,
+                org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "maFaq"));
+
         return ResponseEntity.ok(ApiResponse.<org.springframework.data.domain.Page<FAQJpaEntity>>builder()
                 .status(AppStatus.SUCCESS.getCode())
                 .data(faqRepo.findAll(FAQSpecification.filter(filter), pageable))
@@ -39,6 +46,13 @@ public class AdminFAQApiController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<FAQJpaEntity>> createFAQ(@RequestBody FAQJpaEntity faq) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        AdminJpaEntity admin = adminRepo.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy Admin với email: " + email));
+
+        faq.setAdmin(admin);
+
         FAQJpaEntity savedFaq = faqRepo.save(faq);
         return ResponseEntity.ok(ApiResponse.<FAQJpaEntity>builder()
                 .status(AppStatus.SUCCESS.getCode())

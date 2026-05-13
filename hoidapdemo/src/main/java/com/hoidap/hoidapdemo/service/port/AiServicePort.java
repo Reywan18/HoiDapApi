@@ -7,4 +7,5 @@ public interface AiServicePort {
     void processAndSavePdf(MultipartFile file) throws IOException;
     String testSearchDb(String question);
     String chatWithAi(String question);
+    void saveTextToDb(String questionToCheck, String fullConversationText);
 }

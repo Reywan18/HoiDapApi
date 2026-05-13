@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Collections;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
@@ -19,6 +18,7 @@ import org.springframework.core.io.ByteArrayResource;
 import com.hoidap.hoidapdemo.service.port.AiServicePort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.ai.vectorstore.SearchRequest;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,11 +28,11 @@ public class AiServiceImpl implements AiServicePort {
 
     private final VectorStore vectorStore;
 
-    @Value("${app.gemini.api-key}")
-    private String geminiApiKey;
+    @Value("${app.ollama.model}")
+    private String ollamaModel;
 
-    @Value("${app.gemini.url}")
-    private String geminiApiUrl;
+    @Value("${app.ollama.url}")
+    private String ollamaUrl;
 
     public AiServiceImpl(VectorStore vectorStore) {
         this.vectorStore = vectorStore;
@@ -89,6 +89,38 @@ public class AiServiceImpl implements AiServicePort {
             // thẳng vào ChromaDB
             vectorStore.add(batch);
         }
+    }
+
+    // --- Lưu văn bản thuần (text) vào ChromaDB (Hỗ trợ chống trùng lặp) ---
+    @Override
+    public void saveTextToDb(String questionToCheck, String fullConversationText) {
+        if (fullConversationText == null || fullConversationText.trim().isEmpty()) {
+            return;
+        }
+
+        // Kiểm tra xem câu hỏi này đã tồn tại trong DB chưa (ngưỡng tương đồng 0.85)
+        List<Document> existing = vectorStore.similaritySearch(
+                SearchRequest.query(questionToCheck)
+                        .withTopK(1)
+                        .withSimilarityThreshold(0.85));
+
+        if (existing != null && !existing.isEmpty()) {
+            System.out.println("Câu hỏi đã tồn tại trong ChromaDB (Similarity >= 0.85), bỏ qua nạp mới.");
+            return;
+        }
+
+        System.out.println("Đang nạp kiến thức mới vào ChromaDB từ cuộc hội thoại...");
+
+        // Tạo một Document từ đoạn hội thoại
+        Document doc = new Document(fullConversationText);
+
+        // Phân rã văn bản thành các đoạn văn nhỏ
+        TokenTextSplitter textSplitter = new TokenTextSplitter();
+        List<Document> splitDocuments = textSplitter.apply(List.of(doc));
+
+        // Nạp vào ChromaDB
+        vectorStore.add(splitDocuments);
+        System.out.println("Đã nạp kiến thức thành công!");
     }
 
     // --- Hỗ trợ việc kiểm tra DB (Xem VectorStore đã học được gì chưa) ---
@@ -152,43 +184,46 @@ public class AiServiceImpl implements AiServicePort {
                 +
                 "Câu hỏi của sinh viên: " + question;
 
-        // 4. KẾT XUẤT (Generation): Đưa câu lệnh hoàn chỉnh vào thẳng Google Gemini
-        // Native
-        System.out.println("--> [3] Bắt đầu gọi API Google Gemini ĐỘC QUYỀN (Native)...");
+        // 4. KẾT XUẤT (Generation): Đưa câu lệnh hoàn chỉnh vào thẳng Local Ollama
+        System.out.println("--> [3] Bắt đầu gọi API Local Ollama...");
         long startGen = System.currentTimeMillis();
-        String result = callNativeGeminiApi(prompt);
+        String result = callLocalOllamaApi(prompt);
         System.out.println(
-                "--> [4] GEMINI API PHẢN HỒI HOÀN TẤT (Mất " + (System.currentTimeMillis() - startGen) + "ms).");
+                "--> [4] OLLAMA API PHẢN HỒI HOÀN TẤT (Mất " + (System.currentTimeMillis() - startGen) + "ms).");
         return result;
     }
 
-    private String callNativeGeminiApi(String promptText) {
+    private String callLocalOllamaApi(String promptText) {
         try {
-            String url = geminiApiUrl + geminiApiKey;
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            Map<String, Object> textPart = new HashMap<>();
-            textPart.put("text", promptText);
-
-            Map<String, Object> partObj = new HashMap<>();
-            partObj.put("parts", Collections.singletonList(textPart));
-
             Map<String, Object> body = new HashMap<>();
-            body.put("contents", Collections.singletonList(partObj));
+            body.put("model", ollamaModel);
+            body.put("prompt", promptText);
+            body.put("stream", false);
+
+            Map<String, Object> options = new HashMap<>();
+            options.put("num_predict", 300); // Giới hạn tối đa 300 token để tránh việc AI bị vòng lặp sinh chữ vô hạn
+            body.put("options", options);
 
             HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
-            ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+            ResponseEntity<String> response = restTemplate.postForEntity(ollamaUrl, request, String.class);
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode root = mapper.readTree(response.getBody());
 
+            System.out.println("OLLAMA RESPONSE JSON: " + response.getBody());
+
             // Lấy chính xác phần nội dung chữ từ JSON trả về
-            return root.path("candidates").get(0).path("content").path("parts").get(0).path("text").asText();
+            if (root.has("error")) {
+                return "Lỗi từ Ollama: " + root.path("error").asText();
+            }
+            return root.path("response").asText();
         } catch (Exception e) {
             e.printStackTrace();
-            return "Lỗi từ chính Google API: " + e.getMessage();
+            return "Lỗi từ Local Ollama API: " + e.getMessage();
         }
     }
 }

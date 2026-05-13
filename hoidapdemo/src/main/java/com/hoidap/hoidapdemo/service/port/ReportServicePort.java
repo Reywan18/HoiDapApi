@@ -4,4 +4,5 @@ import com.hoidap.hoidapdemo.dto.report.DashboardStats;
 
 public interface ReportServicePort {
     DashboardStats getDashboardStats();
+    DashboardStats getDashboardStatsForCVHT(String maCv);
 }

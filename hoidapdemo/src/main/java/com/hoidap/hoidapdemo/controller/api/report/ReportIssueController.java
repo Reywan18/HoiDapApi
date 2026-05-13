@@ -1,9 +1,9 @@
 package com.hoidap.hoidapdemo.controller.api.report;
 
-import com.hoidap.hoidapdemo.dto.report.BaoCaoDetailDto;
+import com.hoidap.hoidapdemo.dto.report.ReportDetailDto;
 import com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity;
-import com.hoidap.hoidapdemo.entity.report.BaoCaoJpaEntity;
-import com.hoidap.hoidapdemo.repository.BaoCaoRepository;
+import com.hoidap.hoidapdemo.entity.report.ReportJpaEntity;
+import com.hoidap.hoidapdemo.repository.ReportRepository;
 import com.hoidap.hoidapdemo.repository.chat.ConversationJpaRepository;
 import com.hoidap.hoidapdemo.dto.common.ApiResponse;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +19,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class ReportIssueController {
 
-    private final BaoCaoRepository baoCaoRepository;
+    private final ReportRepository baoCaoRepository;
     private final ConversationJpaRepository conversationRepository;
 
-    public ReportIssueController(BaoCaoRepository baoCaoRepository,
-                                 ConversationJpaRepository conversationRepository) {
+    public ReportIssueController(ReportRepository baoCaoRepository,
+            ConversationJpaRepository conversationRepository) {
         this.baoCaoRepository = baoCaoRepository;
         this.conversationRepository = conversationRepository;
     }
@@ -34,8 +34,11 @@ public class ReportIssueController {
         Long conversationId = Long.valueOf(payload.get("conversationId").toString());
         String reason = payload.getOrDefault("reason", "").toString();
 
-        BaoCaoJpaEntity baoCao = BaoCaoJpaEntity.builder()
-                .conversationId(conversationId)
+        ConversationJpaEntity conv = conversationRepository.findById(conversationId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy cuộc hội thoại"));
+
+        ReportJpaEntity baoCao = ReportJpaEntity.builder()
+                .conversation(conv)
                 .lyDo(reason)
                 .thoiGianBaoCao(LocalDateTime.now())
                 .trangThai("PENDING")
@@ -44,10 +47,8 @@ public class ReportIssueController {
         baoCaoRepository.save(baoCao);
 
         // Cập nhật trạng thái conversation sang REPORTED
-        conversationRepository.findById(conversationId).ifPresent(conv -> {
-            conv.setTrangThai(com.hoidap.hoidapdemo.entity.enums.ConversationStatus.REPORTED);
-            conversationRepository.save(conv);
-        });
+        conv.setTrangThai(com.hoidap.hoidapdemo.entity.enums.ConversationStatus.REPORTED);
+        conversationRepository.save(conv);
 
         return ResponseEntity.ok(ApiResponse.<String>builder()
                 .status(200)
@@ -57,14 +58,14 @@ public class ReportIssueController {
 
     @GetMapping("/admin/issues")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<ApiResponse<List<BaoCaoDetailDto>>> getAllReports() {
-        List<BaoCaoJpaEntity> reports = baoCaoRepository.findAll();
+    public ResponseEntity<ApiResponse<List<ReportDetailDto>>> getAllReports() {
+        List<ReportJpaEntity> reports = baoCaoRepository.findAll();
         // Sắp xếp mới nhất lên đầu
         reports.sort((a, b) -> b.getThoiGianBaoCao().compareTo(a.getThoiGianBaoCao()));
 
-        List<BaoCaoDetailDto> result = reports.stream().map(r -> {
-            // JOIN với bảng conversation để lấy thông tin CVHT và SV
-            ConversationJpaEntity conv = conversationRepository.findById(r.getConversationId()).orElse(null);
+        List<ReportDetailDto> result = reports.stream().map(r -> {
+            // Đã có JOIN trực tiếp từ JPA Entity
+            ConversationJpaEntity conv = r.getConversation();
 
             String maCv = null, tenCv = null, maSv = null, tenSv = null, tieuDe = null;
             if (conv != null) {
@@ -79,9 +80,9 @@ public class ReportIssueController {
                 tieuDe = conv.getTieuDe();
             }
 
-            return BaoCaoDetailDto.builder()
+            return ReportDetailDto.builder()
                     .id(r.getId())
-                    .conversationId(r.getConversationId())
+                    .conversationId(conv != null ? conv.getId() : null)
                     .tieuDeConversation(tieuDe)
                     .maCv(maCv)
                     .tenCv(tenCv)
@@ -93,7 +94,7 @@ public class ReportIssueController {
                     .build();
         }).collect(Collectors.toList());
 
-        return ResponseEntity.ok(ApiResponse.<List<BaoCaoDetailDto>>builder()
+        return ResponseEntity.ok(ApiResponse.<List<ReportDetailDto>>builder()
                 .status(200)
                 .data(result)
                 .build());
@@ -102,7 +103,7 @@ public class ReportIssueController {
     @PutMapping("/admin/issues/{id}/resolve")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ApiResponse<String>> resolveReport(@PathVariable Long id) {
-        BaoCaoJpaEntity baoCao = baoCaoRepository.findById(id)
+        ReportJpaEntity baoCao = baoCaoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy báo cáo"));
         baoCao.setTrangThai("RESOLVED");
         baoCaoRepository.save(baoCao);

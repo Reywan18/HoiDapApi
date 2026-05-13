@@ -45,9 +45,9 @@ spring:
         initialize-schema: true
 
 app:
-  gemini:
-    api-key: ${GOOGLE_AI_API_KEY:AIzaSyDO7m_uto84RISZfhzfV5-zZfcR6CL-AJE}
-    url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=
+  ollama:
+    url: ${OLLAMA_API_URL:http://localhost:11434/api/generate}
+    model: ${OLLAMA_MODEL:llama3.2:3b}
 
   jwt:
     secret: ${JWT_SECRET:rAgzHyLsdnzkWnajRDtbRXJx3w75tWjtqgNZTQ2sjPY}

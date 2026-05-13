@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class BaoCaoDetailDto {
+public class ReportDetailDto {
     private Long id;
     private Long conversationId;
     private String tieuDeConversation;

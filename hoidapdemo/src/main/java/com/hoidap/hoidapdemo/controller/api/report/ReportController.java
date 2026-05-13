@@ -35,8 +35,8 @@ public class ReportController {
     }
 
     @GetMapping("/cvht/{maCv}")
-    public ResponseEntity<ApiResponse<DashboardStats>> getAdvisorDashboard(@PathVariable String maCv) {
-        DashboardStats stats = reportService.getDashboardStatsForAdvisor(maCv);
+    public ResponseEntity<ApiResponse<DashboardStats>> getCVHTDashboard(@PathVariable String maCv) {
+        DashboardStats stats = reportService.getDashboardStatsForCVHT(maCv);
         return ResponseEntity.ok(ApiResponse.<DashboardStats>builder()
                 .status(200)
                 .message("Lấy báo cáo cố vấn thành công")

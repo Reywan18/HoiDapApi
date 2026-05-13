@@ -1,0 +1,634 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------------< com.hoidap:hoidapdemo >------------------------
+[INFO] Building hoidapdemo 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.3.2:clean (default-clean) @ hoidapdemo ---
+[INFO] Deleting C:\Users\anhqu\Desktop\KLTN\hoidapdemo\hoidapdemo\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ hoidapdemo ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 5 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ hoidapdemo ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 82 source files with javac [debug parameters release 17] to target\classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/report/ReportIssueController.java:[3,40] cannot access com.hoidap.hoidapdemo.dto.report.BaoCaoDetailDto
+  bad source file: C:\Users\anhqu\Desktop\KLTN\hoidapdemo\hoidapdemo\src\main\java\com\hoidap\hoidapdemo\dto\report\BaoCaoDetailDto.java
+    file does not contain class com.hoidap.hoidapdemo.dto.report.BaoCaoDetailDto
+    Please remove or make sure it appears in the correct subdirectory of the sourcepath.
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/dto/report/BaoCaoDetailDto.java:[10,8] class ReportDetailDto is public, should be declared in a file named ReportDetailDto.java
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/report/ReportIssueController.java:[5,43] cannot find symbol
+  symbol:   class BaoCaoJpaEntity
+  location: package com.hoidap.hoidapdemo.entity.report
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/report/ReportIssueController.java:[6,40] cannot find symbol
+  symbol:   class BaoCaoRepository
+  location: package com.hoidap.hoidapdemo.repository
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/report/ReportIssueController.java:[22,19] cannot find symbol
+  symbol:   class BaoCaoRepository
+  location: class com.hoidap.hoidapdemo.controller.api.report.ReportIssueController
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/report/ReportIssueController.java:[25,34] cannot find symbol
+  symbol:   class BaoCaoRepository
+  location: class com.hoidap.hoidapdemo.controller.api.report.ReportIssueController
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/report/ReportIssueController.java:[61,44] cannot find symbol
+  symbol:   class BaoCaoDetailDto
+  location: class com.hoidap.hoidapdemo.controller.api.report.ReportIssueController
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/HoidapdemoApplication.java:[25,38] cannot find symbol
+  symbol:   method setEmail(java.lang.String)
+  location: variable admin of type com.hoidap.hoidapdemo.entity.admin.AdminJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/HoidapdemoApplication.java:[26,38] cannot find symbol
+  symbol:   method setPassword(java.lang.String)
+  location: variable admin of type com.hoidap.hoidapdemo.entity.admin.AdminJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/config/GlobalExceptionHandler.java:[25,50] cannot find symbol
+  symbol:   method builder()
+  location: class com.hoidap.hoidapdemo.dto.auth.AuthResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/config/GlobalExceptionHandler.java:[37,50] cannot find symbol
+  symbol:   method builder()
+  location: class com.hoidap.hoidapdemo.dto.auth.AuthResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/config/GlobalExceptionHandler.java:[52,50] cannot find symbol
+  symbol:   method builder()
+  location: class com.hoidap.hoidapdemo.dto.auth.AuthResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/security/CustomerUserDetailService.java:[37,33] cannot find symbol
+  symbol:   method getEmail()
+  location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/security/CustomerUserDetailService.java:[38,33] cannot find symbol
+  symbol:   method getPassword()
+  location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/security/CustomerUserDetailService.java:[47,33] cannot find symbol
+  symbol:   method getEmail()
+  location: variable cv of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/security/CustomerUserDetailService.java:[48,33] cannot find symbol
+  symbol:   method getPassword()
+  location: variable cv of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/security/CustomerUserDetailService.java:[57,36] cannot find symbol
+  symbol:   method getEmail()
+  location: variable admin of type com.hoidap.hoidapdemo.entity.admin.AdminJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/security/CustomerUserDetailService.java:[58,36] cannot find symbol
+  symbol:   method getPassword()
+  location: variable admin of type com.hoidap.hoidapdemo.entity.admin.AdminJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminAccountApiController.java:[26,45] cannot find symbol
+  symbol:   method <com.hoidap.hoidapdemo.dto.auth.AccountCreatedResponse>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminAccountApiController.java:[36,45] cannot find symbol
+  symbol:   method <com.hoidap.hoidapdemo.dto.auth.AccountCreatedResponse>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminAccountApiController.java:[46,45] cannot find symbol
+  symbol:   method <com.hoidap.hoidapdemo.dto.auth.AccountCreatedResponse>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminAccountApiController.java:[56,45] cannot find symbol
+  symbol:   method <com.hoidap.hoidapdemo.dto.auth.AccountCreatedResponse>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[37,30] cannot find symbol
+  symbol:   method getMaDinhDanh()
+  location: variable request of type com.hoidap.hoidapdemo.dto.auth.CreateUserRequest
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[38,31] cannot find symbol
+  symbol:   method getEmail()
+  location: variable request of type com.hoidap.hoidapdemo.dto.auth.CreateUserRequest
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[55,11] cannot find symbol
+  symbol:   method setMaSv(java.lang.String)
+  location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[56,11] cannot find symbol
+  symbol:   method setEmail(java.lang.String)
+  location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[57,11] cannot find symbol
+  symbol:   method setPassword(java.lang.String)
+  location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[58,11] cannot find symbol
+  symbol:   method setRole(java.lang.String)
+  location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[59,11] cannot find symbol
+  symbol:   method setHoTen(java.lang.String)
+  location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[63,38] cannot find symbol
+  symbol:   method builder()
+  location: class com.hoidap.hoidapdemo.dto.auth.AccountCreatedResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[72,30] cannot find symbol
+  symbol:   method getMaDinhDanh()
+  location: variable request of type com.hoidap.hoidapdemo.dto.auth.CreateUserRequest
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[73,31] cannot find symbol
+  symbol:   method getEmail()
+  location: variable request of type com.hoidap.hoidapdemo.dto.auth.CreateUserRequest
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[90,13] cannot find symbol
+  symbol:   method setMaCv(java.lang.String)
+  location: variable cvht of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[91,13] cannot find symbol
+  symbol:   method setEmail(java.lang.String)
+  location: variable cvht of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[92,13] cannot find symbol
+  symbol:   method setPassword(java.lang.String)
+  location: variable cvht of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[93,13] cannot find symbol
+  symbol:   method setRole(java.lang.String)
+  location: variable cvht of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[94,13] cannot find symbol
+  symbol:   method setHoTen(java.lang.String)
+  location: variable cvht of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[98,38] cannot find symbol
+  symbol:   method builder()
+  location: class com.hoidap.hoidapdemo.dto.auth.AccountCreatedResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[111,11] cannot find symbol
+  symbol:   method setPassword(java.lang.String)
+  location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[114,38] cannot find symbol
+  symbol:   method builder()
+  location: class com.hoidap.hoidapdemo.dto.auth.AccountCreatedResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[115,26] cannot find symbol
+  symbol:   method getEmail()
+  location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[127,13] cannot find symbol
+  symbol:   method setPassword(java.lang.String)
+  location: variable cvht of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[130,38] cannot find symbol
+  symbol:   method builder()
+  location: class com.hoidap.hoidapdemo.dto.auth.AccountCreatedResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[131,28] cannot find symbol
+  symbol:   method getEmail()
+  location: variable cvht of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminFAQApiController.java:[34,45] cannot find symbol
+  symbol:   method <org.springframework.data.domain.Page<com.hoidap.hoidapdemo.entity.faq.FAQJpaEntity>>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminFAQApiController.java:[43,45] cannot find symbol
+  symbol:   method <com.hoidap.hoidapdemo.entity.faq.FAQJpaEntity>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminFAQApiController.java:[52,12] cannot find symbol
+  symbol:   method setMaFaq(java.lang.Long)
+  location: variable faq of type com.hoidap.hoidapdemo.entity.faq.FAQJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminFAQApiController.java:[54,45] cannot find symbol
+  symbol:   method <com.hoidap.hoidapdemo.entity.faq.FAQJpaEntity>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminFAQApiController.java:[64,45] cannot find symbol
+  symbol:   method <java.lang.String>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminLopApiController.java:[33,45] cannot find symbol
+  symbol:   method <org.springframework.data.domain.Page<com.hoidap.hoidapdemo.entity.lop.LopJpaEntity>>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminLopApiController.java:[42,45] cannot find symbol
+  symbol:   method <java.lang.String>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminLopApiController.java:[51,45] cannot find symbol
+  symbol:   method <java.lang.String>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminLopApiController.java:[60,45] cannot find symbol
+  symbol:   method <java.lang.String>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminLopApiController.java:[84,53] cannot find symbol
+  symbol:   method <java.lang.String>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminLopApiController.java:[89,68] cannot find symbol
+  symbol:   method <java.lang.String>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminLopApiController.java:[95,60] cannot find symbol
+  symbol:   method <java.lang.String>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[49,45] cannot find symbol
+  symbol:   method <org.springframework.data.domain.Page<com.hoidap.hoidapdemo.dto.chat.ConversationResponseDto>>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[59,45] cannot find symbol
+  symbol:   method <com.hoidap.hoidapdemo.dto.chat.ConversationResponseDto>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[70,35] cannot find symbol
+  symbol:   method getTieuDe()
+  location: variable updated of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[73,38] cannot find symbol
+  symbol:   method getTrangThai()
+  location: variable updated of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[77,45] cannot find symbol
+  symbol:   method <com.hoidap.hoidapdemo.dto.chat.ConversationResponseDto>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[94,45] cannot find symbol
+  symbol:   method <java.lang.String>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[102,25] cannot find symbol
+  symbol:   method getId()
+  location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[103,29] cannot find symbol
+  symbol:   method getTieuDe()
+  location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[104,12] cannot find symbol
+  symbol:   method setTrangThai(entity.get[...] null)
+  location: variable dto of type com.hoidap.hoidapdemo.dto.chat.ConversationResponseDto
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[104,32] cannot find symbol
+  symbol:   method getTrangThai()
+  location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[104,64] cannot find symbol
+  symbol:   method getTrangThai()
+  location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[105,30] cannot find symbol
+  symbol:   method getNgayTao()
+  location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[106,38] cannot find symbol
+  symbol:   method getNgayCapNhatCuoi()
+  location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[108,19] cannot find symbol
+  symbol:   method getSinhVien()
+  location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[109,42] cannot find symbol
+  symbol:   method getSinhVien()
+  location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[110,27] cannot find symbol
+  symbol:   method getMaSv()
+  location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[111,28] cannot find symbol
+  symbol:   method getHoTen()
+  location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[112,30] cannot find symbol
+  symbol:   method getEmail()
+  location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[113,28] cannot find symbol
+  symbol:   method getSoDienThoai()
+  location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[114,19] cannot find symbol
+  symbol:   method getLop()
+  location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[115,34] cannot find symbol
+  symbol:   method getLop()
+  location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[116,33] cannot find symbol
+  symbol:   method getLop()
+  location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[120,19] cannot find symbol
+  symbol:   method getCvht()
+  location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[121,38] cannot find symbol
+  symbol:   method getCvht()
+  location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[122,27] cannot find symbol
+  symbol:   method getMaCv()
+  location: variable cv of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[123,28] cannot find symbol
+  symbol:   method getHoTen()
+  location: variable cv of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[124,30] cannot find symbol
+  symbol:   method getEmail()
+  location: variable cv of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[125,28] cannot find symbol
+  symbol:   method getSoDienThoai()
+  location: variable cv of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[126,34] cannot find symbol
+  symbol:   method getChuyenMon()
+  location: variable cv of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminUserApiController.java:[34,45] cannot find symbol
+  symbol:   method <org.springframework.data.domain.Page<com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity>>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminUserApiController.java:[42,11] cannot find symbol
+  symbol:   method setMaSv(java.lang.String)
+  location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminUserApiController.java:[44,45] cannot find symbol
+  symbol:   method <java.lang.String>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminUserApiController.java:[53,45] cannot find symbol
+  symbol:   method <java.lang.String>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminUserApiController.java:[68,45] cannot find symbol
+  symbol:   method <org.springframework.data.domain.Page<com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity>>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminUserApiController.java:[76,11] cannot find symbol
+  symbol:   method setMaCv(java.lang.String)
+  location: variable cv of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminUserApiController.java:[78,45] cannot find symbol
+  symbol:   method <java.lang.String>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminUserApiController.java:[87,45] cannot find symbol
+  symbol:   method <java.lang.String>builder()
+  location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/auth/AuthController.java:[52,53] cannot find symbol
+  symbol:   method getEmail()
+  location: variable request of type com.hoidap.hoidapdemo.dto.auth.LoginRequest
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/auth/AuthController.java:[52,73] cannot find symbol
+  symbol:   method getPassword()
+  location: variable request of type com.hoidap.hoidapdemo.dto.auth.LoginRequest
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/auth/AuthController.java:[54,49] cannot find symbol
+  symbol:   method builder()
+  location: class com.hoidap.hoidapdemo.dto.auth.AuthResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/auth/AuthController.java:[64,33] cannot find symbol
+  symbol:   method builder()
+  location: class com.hoidap.hoidapdemo.dto.auth.AuthResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/auth/AuthController.java:[70,33] cannot find symbol
+  symbol:   method builder()
+  location: class com.hoidap.hoidapdemo.dto.auth.AuthResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/auth/AuthController.java:[85,50] cannot find symbol
+  symbol:   method builder()
+  location: class com.hoidap.hoidapdemo.dto.auth.AuthResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/auth/AuthController.java:[90,65] cannot find symbol
+  symbol:   method builder()
+  location: class com.hoidap.hoidapdemo.dto.auth.AuthResponse
+[INFO] 100 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  4.075 s
+[INFO] Finished at: 2026-05-13T12:55:39+07:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.13.0:compile (default-compile) on project hoidapdemo: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/report/ReportIssueController.java:[3,40] cannot access com.hoidap.hoidapdemo.dto.report.BaoCaoDetailDto
+[ERROR]   bad source file: C:\Users\anhqu\Desktop\KLTN\hoidapdemo\hoidapdemo\src\main\java\com\hoidap\hoidapdemo\dto\report\BaoCaoDetailDto.java
+[ERROR]     file does not contain class com.hoidap.hoidapdemo.dto.report.BaoCaoDetailDto
+[ERROR]     Please remove or make sure it appears in the correct subdirectory of the sourcepath.
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/dto/report/BaoCaoDetailDto.java:[10,8] class ReportDetailDto is public, should be declared in a file named ReportDetailDto.java
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/report/ReportIssueController.java:[5,43] cannot find symbol
+[ERROR]   symbol:   class BaoCaoJpaEntity
+[ERROR]   location: package com.hoidap.hoidapdemo.entity.report
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/report/ReportIssueController.java:[6,40] cannot find symbol
+[ERROR]   symbol:   class BaoCaoRepository
+[ERROR]   location: package com.hoidap.hoidapdemo.repository
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/report/ReportIssueController.java:[22,19] cannot find symbol
+[ERROR]   symbol:   class BaoCaoRepository
+[ERROR]   location: class com.hoidap.hoidapdemo.controller.api.report.ReportIssueController
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/report/ReportIssueController.java:[25,34] cannot find symbol
+[ERROR]   symbol:   class BaoCaoRepository
+[ERROR]   location: class com.hoidap.hoidapdemo.controller.api.report.ReportIssueController
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/report/ReportIssueController.java:[61,44] cannot find symbol
+[ERROR]   symbol:   class BaoCaoDetailDto
+[ERROR]   location: class com.hoidap.hoidapdemo.controller.api.report.ReportIssueController
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/HoidapdemoApplication.java:[25,38] cannot find symbol
+[ERROR]   symbol:   method setEmail(java.lang.String)
+[ERROR]   location: variable admin of type com.hoidap.hoidapdemo.entity.admin.AdminJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/HoidapdemoApplication.java:[26,38] cannot find symbol
+[ERROR]   symbol:   method setPassword(java.lang.String)
+[ERROR]   location: variable admin of type com.hoidap.hoidapdemo.entity.admin.AdminJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/config/GlobalExceptionHandler.java:[25,50] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.auth.AuthResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/config/GlobalExceptionHandler.java:[37,50] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.auth.AuthResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/config/GlobalExceptionHandler.java:[52,50] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.auth.AuthResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/security/CustomerUserDetailService.java:[37,33] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/security/CustomerUserDetailService.java:[38,33] cannot find symbol
+[ERROR]   symbol:   method getPassword()
+[ERROR]   location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/security/CustomerUserDetailService.java:[47,33] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable cv of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/security/CustomerUserDetailService.java:[48,33] cannot find symbol
+[ERROR]   symbol:   method getPassword()
+[ERROR]   location: variable cv of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/security/CustomerUserDetailService.java:[57,36] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable admin of type com.hoidap.hoidapdemo.entity.admin.AdminJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/security/CustomerUserDetailService.java:[58,36] cannot find symbol
+[ERROR]   symbol:   method getPassword()
+[ERROR]   location: variable admin of type com.hoidap.hoidapdemo.entity.admin.AdminJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminAccountApiController.java:[26,45] cannot find symbol
+[ERROR]   symbol:   method <com.hoidap.hoidapdemo.dto.auth.AccountCreatedResponse>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminAccountApiController.java:[36,45] cannot find symbol
+[ERROR]   symbol:   method <com.hoidap.hoidapdemo.dto.auth.AccountCreatedResponse>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminAccountApiController.java:[46,45] cannot find symbol
+[ERROR]   symbol:   method <com.hoidap.hoidapdemo.dto.auth.AccountCreatedResponse>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminAccountApiController.java:[56,45] cannot find symbol
+[ERROR]   symbol:   method <com.hoidap.hoidapdemo.dto.auth.AccountCreatedResponse>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[37,30] cannot find symbol
+[ERROR]   symbol:   method getMaDinhDanh()
+[ERROR]   location: variable request of type com.hoidap.hoidapdemo.dto.auth.CreateUserRequest
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[38,31] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable request of type com.hoidap.hoidapdemo.dto.auth.CreateUserRequest
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[55,11] cannot find symbol
+[ERROR]   symbol:   method setMaSv(java.lang.String)
+[ERROR]   location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[56,11] cannot find symbol
+[ERROR]   symbol:   method setEmail(java.lang.String)
+[ERROR]   location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[57,11] cannot find symbol
+[ERROR]   symbol:   method setPassword(java.lang.String)
+[ERROR]   location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[58,11] cannot find symbol
+[ERROR]   symbol:   method setRole(java.lang.String)
+[ERROR]   location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[59,11] cannot find symbol
+[ERROR]   symbol:   method setHoTen(java.lang.String)
+[ERROR]   location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[63,38] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.auth.AccountCreatedResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[72,30] cannot find symbol
+[ERROR]   symbol:   method getMaDinhDanh()
+[ERROR]   location: variable request of type com.hoidap.hoidapdemo.dto.auth.CreateUserRequest
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[73,31] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable request of type com.hoidap.hoidapdemo.dto.auth.CreateUserRequest
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[90,13] cannot find symbol
+[ERROR]   symbol:   method setMaCv(java.lang.String)
+[ERROR]   location: variable cvht of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[91,13] cannot find symbol
+[ERROR]   symbol:   method setEmail(java.lang.String)
+[ERROR]   location: variable cvht of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[92,13] cannot find symbol
+[ERROR]   symbol:   method setPassword(java.lang.String)
+[ERROR]   location: variable cvht of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[93,13] cannot find symbol
+[ERROR]   symbol:   method setRole(java.lang.String)
+[ERROR]   location: variable cvht of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[94,13] cannot find symbol
+[ERROR]   symbol:   method setHoTen(java.lang.String)
+[ERROR]   location: variable cvht of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[98,38] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.auth.AccountCreatedResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[111,11] cannot find symbol
+[ERROR]   symbol:   method setPassword(java.lang.String)
+[ERROR]   location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[114,38] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.auth.AccountCreatedResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[115,26] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[127,13] cannot find symbol
+[ERROR]   symbol:   method setPassword(java.lang.String)
+[ERROR]   location: variable cvht of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[130,38] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.auth.AccountCreatedResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/service/AdminServiceImpl.java:[131,28] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable cvht of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminFAQApiController.java:[34,45] cannot find symbol
+[ERROR]   symbol:   method <org.springframework.data.domain.Page<com.hoidap.hoidapdemo.entity.faq.FAQJpaEntity>>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminFAQApiController.java:[43,45] cannot find symbol
+[ERROR]   symbol:   method <com.hoidap.hoidapdemo.entity.faq.FAQJpaEntity>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminFAQApiController.java:[52,12] cannot find symbol
+[ERROR]   symbol:   method setMaFaq(java.lang.Long)
+[ERROR]   location: variable faq of type com.hoidap.hoidapdemo.entity.faq.FAQJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminFAQApiController.java:[54,45] cannot find symbol
+[ERROR]   symbol:   method <com.hoidap.hoidapdemo.entity.faq.FAQJpaEntity>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminFAQApiController.java:[64,45] cannot find symbol
+[ERROR]   symbol:   method <java.lang.String>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminLopApiController.java:[33,45] cannot find symbol
+[ERROR]   symbol:   method <org.springframework.data.domain.Page<com.hoidap.hoidapdemo.entity.lop.LopJpaEntity>>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminLopApiController.java:[42,45] cannot find symbol
+[ERROR]   symbol:   method <java.lang.String>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminLopApiController.java:[51,45] cannot find symbol
+[ERROR]   symbol:   method <java.lang.String>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminLopApiController.java:[60,45] cannot find symbol
+[ERROR]   symbol:   method <java.lang.String>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminLopApiController.java:[84,53] cannot find symbol
+[ERROR]   symbol:   method <java.lang.String>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminLopApiController.java:[89,68] cannot find symbol
+[ERROR]   symbol:   method <java.lang.String>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminLopApiController.java:[95,60] cannot find symbol
+[ERROR]   symbol:   method <java.lang.String>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[49,45] cannot find symbol
+[ERROR]   symbol:   method <org.springframework.data.domain.Page<com.hoidap.hoidapdemo.dto.chat.ConversationResponseDto>>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[59,45] cannot find symbol
+[ERROR]   symbol:   method <com.hoidap.hoidapdemo.dto.chat.ConversationResponseDto>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[70,35] cannot find symbol
+[ERROR]   symbol:   method getTieuDe()
+[ERROR]   location: variable updated of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[73,38] cannot find symbol
+[ERROR]   symbol:   method getTrangThai()
+[ERROR]   location: variable updated of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[77,45] cannot find symbol
+[ERROR]   symbol:   method <com.hoidap.hoidapdemo.dto.chat.ConversationResponseDto>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[94,45] cannot find symbol
+[ERROR]   symbol:   method <java.lang.String>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[102,25] cannot find symbol
+[ERROR]   symbol:   method getId()
+[ERROR]   location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[103,29] cannot find symbol
+[ERROR]   symbol:   method getTieuDe()
+[ERROR]   location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[104,12] cannot find symbol
+[ERROR]   symbol:   method setTrangThai(entity.get[...] null)
+[ERROR]   location: variable dto of type com.hoidap.hoidapdemo.dto.chat.ConversationResponseDto
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[104,32] cannot find symbol
+[ERROR]   symbol:   method getTrangThai()
+[ERROR]   location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[104,64] cannot find symbol
+[ERROR]   symbol:   method getTrangThai()
+[ERROR]   location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[105,30] cannot find symbol
+[ERROR]   symbol:   method getNgayTao()
+[ERROR]   location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[106,38] cannot find symbol
+[ERROR]   symbol:   method getNgayCapNhatCuoi()
+[ERROR]   location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[108,19] cannot find symbol
+[ERROR]   symbol:   method getSinhVien()
+[ERROR]   location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[109,42] cannot find symbol
+[ERROR]   symbol:   method getSinhVien()
+[ERROR]   location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[110,27] cannot find symbol
+[ERROR]   symbol:   method getMaSv()
+[ERROR]   location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[111,28] cannot find symbol
+[ERROR]   symbol:   method getHoTen()
+[ERROR]   location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[112,30] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[113,28] cannot find symbol
+[ERROR]   symbol:   method getSoDienThoai()
+[ERROR]   location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[114,19] cannot find symbol
+[ERROR]   symbol:   method getLop()
+[ERROR]   location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[115,34] cannot find symbol
+[ERROR]   symbol:   method getLop()
+[ERROR]   location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[116,33] cannot find symbol
+[ERROR]   symbol:   method getLop()
+[ERROR]   location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[120,19] cannot find symbol
+[ERROR]   symbol:   method getCvht()
+[ERROR]   location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[121,38] cannot find symbol
+[ERROR]   symbol:   method getCvht()
+[ERROR]   location: variable entity of type com.hoidap.hoidapdemo.entity.chat.ConversationJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[122,27] cannot find symbol
+[ERROR]   symbol:   method getMaCv()
+[ERROR]   location: variable cv of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[123,28] cannot find symbol
+[ERROR]   symbol:   method getHoTen()
+[ERROR]   location: variable cv of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[124,30] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable cv of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[125,28] cannot find symbol
+[ERROR]   symbol:   method getSoDienThoai()
+[ERROR]   location: variable cv of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminQuestionApiController.java:[126,34] cannot find symbol
+[ERROR]   symbol:   method getChuyenMon()
+[ERROR]   location: variable cv of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminUserApiController.java:[34,45] cannot find symbol
+[ERROR]   symbol:   method <org.springframework.data.domain.Page<com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity>>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminUserApiController.java:[42,11] cannot find symbol
+[ERROR]   symbol:   method setMaSv(java.lang.String)
+[ERROR]   location: variable sv of type com.hoidap.hoidapdemo.entity.sinhvien.SinhVienJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminUserApiController.java:[44,45] cannot find symbol
+[ERROR]   symbol:   method <java.lang.String>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminUserApiController.java:[53,45] cannot find symbol
+[ERROR]   symbol:   method <java.lang.String>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminUserApiController.java:[68,45] cannot find symbol
+[ERROR]   symbol:   method <org.springframework.data.domain.Page<com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity>>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminUserApiController.java:[76,11] cannot find symbol
+[ERROR]   symbol:   method setMaCv(java.lang.String)
+[ERROR]   location: variable cv of type com.hoidap.hoidapdemo.entity.cvht.CVHTJpaEntity
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminUserApiController.java:[78,45] cannot find symbol
+[ERROR]   symbol:   method <java.lang.String>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/admin/AdminUserApiController.java:[87,45] cannot find symbol
+[ERROR]   symbol:   method <java.lang.String>builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.common.ApiResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/auth/AuthController.java:[52,53] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable request of type com.hoidap.hoidapdemo.dto.auth.LoginRequest
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/auth/AuthController.java:[52,73] cannot find symbol
+[ERROR]   symbol:   method getPassword()
+[ERROR]   location: variable request of type com.hoidap.hoidapdemo.dto.auth.LoginRequest
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/auth/AuthController.java:[54,49] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.auth.AuthResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/auth/AuthController.java:[64,33] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.auth.AuthResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/auth/AuthController.java:[70,33] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.auth.AuthResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/auth/AuthController.java:[85,50] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.auth.AuthResponse
+[ERROR] /C:/Users/anhqu/Desktop/KLTN/hoidapdemo/hoidapdemo/src/main/java/com/hoidap/hoidapdemo/controller/api/auth/AuthController.java:[90,65] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.hoidap.hoidapdemo.dto.auth.AuthResponse
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

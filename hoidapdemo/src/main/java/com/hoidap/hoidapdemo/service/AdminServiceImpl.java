@@ -37,7 +37,7 @@ public class AdminServiceImpl implements AdminServicePort {
         String maSv = request.getMaDinhDanh().trim().toUpperCase();
         String email = request.getEmail().trim().toLowerCase();
 
-        String expectedEmail = maSv.toLowerCase() + "@thanglong.edu.vn";
+        String expectedEmail = maSv.toLowerCase() + "@a.edu.vn";
         if (!email.equals(expectedEmail)) {
             throw new IllegalArgumentException("Email sinh viên phải có dạng: " + expectedEmail);
         }
@@ -72,7 +72,7 @@ public class AdminServiceImpl implements AdminServicePort {
         String maCv = request.getMaDinhDanh().trim().toUpperCase();
         String email = request.getEmail().trim().toLowerCase();
 
-        String expectedEmail = maCv.toLowerCase() + "@thanglong.edu.vn";
+        String expectedEmail = maCv.toLowerCase() + "@a.edu.vn";
         if (!email.equals(expectedEmail)) {
             throw new IllegalArgumentException("Email CVHT phải có dạng: " + expectedEmail);
         }

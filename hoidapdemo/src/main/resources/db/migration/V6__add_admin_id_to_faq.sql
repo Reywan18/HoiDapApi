@@ -1,0 +1,2 @@
+ALTER TABLE faq ADD COLUMN admin_id BIGINT;
+ALTER TABLE faq ADD CONSTRAINT fk_faq_admin FOREIGN KEY (admin_id) REFERENCES admin(id);

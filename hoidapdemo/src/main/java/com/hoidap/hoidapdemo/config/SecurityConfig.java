@@ -79,6 +79,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/questions/*/answer").hasRole("CVHT")
                         .requestMatchers("/api/questions/advisor/**").hasRole("CVHT")
                         .requestMatchers("/api/questions/*/file").permitAll()
+                        .requestMatchers("/api/ai/chat").permitAll()
                         .requestMatchers("/api/users/**").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/questions/**").hasRole("SINH_VIEN")
                         .requestMatchers(HttpMethod.PUT, "/api/questions/**").hasRole("SINH_VIEN")
