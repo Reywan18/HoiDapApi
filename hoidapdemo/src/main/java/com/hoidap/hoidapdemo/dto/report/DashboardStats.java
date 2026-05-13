@@ -10,10 +10,13 @@ import java.util.List;
 public class DashboardStats {
     private long totalQuestions;
     private long totalAnswered;
+    private long pendingQuestions;
+    private long studentsCount;
     private double resolutionRate;
 
     private List<AdvisorStat> advisorStats;
     private List<StudentStat> topStudents;
     private List<ClassStat> classStats;
+    private List<Long> weeklyTrend;
 }
 
